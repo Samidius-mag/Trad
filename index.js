@@ -20,6 +20,16 @@ function runLogic() {
   });
 }
 
+function runLoadPrice() {
+  const loadPrice = spawn('node', ['bot.js']);
+  loadPrice.stdout.on('data', (data) => {
+    console.log(`bot.js: ${data}`);
+  });
+  loadPrice.stderr.on('data', (data) => {
+    console.error(`bot.js error: ${data}`);
+  });
+}
+
 setInterval(() => {
   console.log('Restarting scripts...');
   runLoadPrice();
