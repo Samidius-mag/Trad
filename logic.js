@@ -1,43 +1,29 @@
 const fs = require('fs');
 
-function calculateSupportResistance(prices) {
-  const maxPrice = Math.max(...prices);
-  const minPrice = Math.min(...prices);
-  const range = maxPrice - minPrice;
-  const support1 = minPrice + range * 0.25;
-  const support2 = minPrice + range * 0.5;
-  const support3 = minPrice + range * 0.75;
-  const resistance1 = maxPrice - range * 0.25;
-  const resistance2 = maxPrice - range * 0.5;
-  const resistance3 = maxPrice - range * 0.75;
-  return {
-    support1,
-    support2,
-    support3,
-    resistance1,
-    resistance2,
-    resistance3,
-  };
-}
+const supportLevels = [0.9, 0.8, 0.7];
+const resistanceLevels = [1.1, 1.2, 1.3];
 
 function calculateTrend(prices) {
   const currentPrice = prices[prices.length - 1];
-  const prevPrice = prices[prices.length - 2];
-  if (currentPrice > prevPrice) {
-    return 'Up';
-  } else if (currentPrice < prevPrice) {
-    return 'Down';
-  } else {
-    return 'Flat';
-  }
+  const averagePrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+  const trend = currentPrice > averagePrice ? 'up' : 'down';
+  return trend;
 }
 
-fs.readFile('price.json', (err, data) => {
-  if (err) throw err;
-  const prices = JSON.parse(data);
-  const levels = calculateSupportResistance(prices);
+function calculateLevels(prices) {
+  const currentPrice = prices[prices.length - 1];
+  const support = supportLevels.map(level => currentPrice * level);
+  const resistance = resistanceLevels.map(level => currentPrice * level);
+  return { support, resistance };
+}
+
+function analyzePrice() {
+  const prices = JSON.parse(fs.readFileSync('price.json'));
   const trend = calculateTrend(prices);
-  console.log(`Support levels: ${levels.support1}, ${levels.support2}, ${levels.support3}`);
-  console.log(`Resistance levels: ${levels.resistance1}, ${levels.resistance2}, ${levels.resistance3}`);
+  const levels = calculateLevels(prices);
   console.log(`Trend: ${trend}`);
-});
+  console.log(`Support levels: ${levels.support}`);
+  console.log(`Resistance levels: ${levels.resistance}`);
+}
+
+analyzePrice();
