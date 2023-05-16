@@ -1,14 +1,36 @@
 const { spawn } = require('child_process');
 
-const loadPriceProcess = spawn('node', ['loadprice.js']);
-const botProcess = spawn('node', ['bot.js']);
+const loadPrice = () => {
+  const child = spawn('node', ['loadprice.js']);
 
-setInterval(() => {
-  loadPriceProcess.kill();
-  loadPriceProcess = spawn('node', ['loadprice.js']);
-}, 5000);
+  child.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
 
-setInterval(() => {
-  botProcess.kill();
-  botProcess = spawn('node', ['bot.js']);
-}, 60000);
+  child.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  child.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+};
+
+const sendToBot = () => {
+  const child = spawn('node', ['bot.js']);
+
+  child.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  child.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  child.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+};
+
+setInterval(loadPrice, 5000);
+setInterval(sendToBot, 60000);
