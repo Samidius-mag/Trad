@@ -1,33 +1,20 @@
 const { spawn } = require('child_process');
 
-function runLoadPrice() {
-  const loadPrice = spawn('node', ['loadprice.js']);
-  loadPrice.stdout.on('data', (data) => {
-    console.log(`loadprice.js: ${data}`);
-  });
-  loadPrice.stderr.on('data', (data) => {
-    console.error(`loadprice.js error: ${data}`);
+function runScript(scriptPath) {
+  const child = spawn('node', [scriptPath]);
+
+  child.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
   });
 }
 
-
-
-
-function runLoadPrice() {
-  const bot = spawn('node', ['bot.js']);
-  bot.stdout.on('data', (data) => {
-    console.log(`bot.js: ${data}`);
-  });
-  loadPrice.stderr.on('data', (data) => {
-    console.error(`bot.js error: ${data}`);
-  });
+function run() {
+  runScript('loadprice.js');
+  setTimeout(() => {
+    
+    runScript('bot.js');
+  }, 5000);
 }
 
-setInterval(() => {
-  console.log('Restarting scripts...');
-  runLoadPrice();
-  runLogic();
-}, 600000);
-
-runLoadPrice();
-runLogic();
+run();
+setInterval(run, 600000); // 10 minutes
