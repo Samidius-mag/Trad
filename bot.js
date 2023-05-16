@@ -14,7 +14,7 @@ function analyzePrice() {
   const prices = JSON.parse(fs.readFileSync('price.json'));
   const trend = calculateTrend(prices);
   const levels = calculateLevels(prices);
-  const message = `Trend: ${trend}\nSupport levels: ${levels.support}\nResistance levels: ${levels.resistance}`;
+  const message = `Тренд: ${trend}\nУровни поддержки: ${levels.support}\nУровни сопротивления: ${levels.resistance}`;
   sendToTelegram(message);
 }
 
