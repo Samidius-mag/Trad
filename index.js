@@ -1,20 +1,10 @@
-const { spawn } = require('child_process');
+const loadprice = require('./loadprice');
+const bot = require('./bot');
 
-function runScript(scriptPath) {
-  const child = spawn('node', [scriptPath]);
+setInterval(() => {
+  loadprice();
+}, 5000);
 
-  child.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-  });
-}
-
-function run() {
-  runScript('loadprice.js');
-  setTimeout(() => {
-    
-    runScript('bot.js');
-  }, 5000);
-}
-
-run();
-setInterval(run, 600000); // 10 minutes
+setInterval(() => {
+  bot();
+}, 60000);
