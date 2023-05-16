@@ -10,19 +10,12 @@ function runLoadPrice() {
   });
 }
 
-function runLogic() {
-  const logic = spawn('node', ['logic.js']);
-  logic.stdout.on('data', (data) => {
-    console.log(`logic.js: ${data}`);
-  });
-  logic.stderr.on('data', (data) => {
-    console.error(`logic.js error: ${data}`);
-  });
-}
+
+
 
 function runLoadPrice() {
-  const loadPrice = spawn('node', ['bot.js']);
-  loadPrice.stdout.on('data', (data) => {
+  const bot = spawn('node', ['bot.js']);
+  bot.stdout.on('data', (data) => {
     console.log(`bot.js: ${data}`);
   });
   loadPrice.stderr.on('data', (data) => {
