@@ -2,13 +2,13 @@ const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs');
 
 // Задаем токен бота, полученный от BotFather
-const token = 'YOUR_TELEGRAM_BOT_TOKEN';
+const token = '5995075949:AAHek1EL2dqZvJlIR3ssuFLkIsb3ZTgccIQ';
 
 // Создаем экземпляр бота
 const bot = new TelegramBot(token, { polling: false });
 
 // Задаем ID чата, в который будем отправлять сообщения
-const chatId = 'YOUR_TELEGRAM_CHAT_ID';
+const chatId = '-943696838';
 
 // Функция для отправки сообщения в чат
 function sendMessage(message) {
