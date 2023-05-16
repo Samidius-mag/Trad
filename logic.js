@@ -32,7 +32,7 @@ const calculateSupportResistanceLevels = (candles) => {
   const currentCandle = candles[candles.length - 1];
   const currentRange = currentCandle.high - currentCandle.low;
   const currentSupport = currentCandle.low + currentRange * 0.382;
-  const currentResistance = currentCandle.low + currentRange * 0.618;
+  const currentResistance = currentCandle.high + currentRange * 0.618;
 
   return {
     monthSupport,
@@ -45,14 +45,14 @@ const calculateSupportResistanceLevels = (candles) => {
 };
 
 const calculateTrend = (candles) => {
-  const activity = calculateMarketActivity(candles);
+  const volatility = calculateMarketVolatility(candles);
   const trend = {
     month: 'боковой',
     day: 'боковой',
     current: 'боковой',
   };
 
-  if (activity >= 25) {
+  if (volatility >= 25) {
     const monthCandles = candles.slice(-720);
     const monthHigh = Math.max(...monthCandles.map(candle => candle.high));
     const monthLow = Math.min(...monthCandles.map(candle => candle.low));
@@ -126,7 +126,7 @@ fs.readFile('price.json', (err, data) => {
   console.log('Месячный тренд:', trend.month);
   console.log('Дневной тренд:', trend.day);
   console.log('Текущий тренд:', trend.current);
-  console.log('Текущая цена:', currentPrice.toFixed(2));
+  console.log('Текущая цена:', currentPrice);
   console.log('Активность и волатильность в %:');
   console.log(activity, '%', volatility.toFixed(2), '%');
 });
