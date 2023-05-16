@@ -21,9 +21,9 @@ function analyzePrice() {
   const prices = JSON.parse(fs.readFileSync('price.json'));
   const trend = calculateTrend(prices);
   const levels = calculateLevels(prices);
-  console.log(`Trend: ${trend}`);
-  console.log(`Support levels: ${levels.support}`);
-  console.log(`Resistance levels: ${levels.resistance}`);
+  console.log(`Тренд: ${trend}`);
+  console.log(`Уровни поддержки: ${levels.support}`);
+  console.log(`Уровни сопротивления: ${levels.resistance}`);
 }
 
 analyzePrice();
