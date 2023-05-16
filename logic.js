@@ -1,35 +1,20 @@
-const SUPPORT_LEVELS = [0.9, 0.8, 0.7];
-const RESISTANCE_LEVELS = [1.1, 1.2, 1.3];
+const fs = require('fs');
 
-function calculateLevels(prices) {
-  const currentPrice = prices[prices.length - 1];
-  const supportLevels = SUPPORT_LEVELS.map(level => level * currentPrice);
-  const resistanceLevels = RESISTANCE_LEVELS.map(level => level * currentPrice);
-  return { supportLevels, resistanceLevels };
-}
+const prices = JSON.parse(fs.readFileSync('price.json'));
 
-function calculateTrend(prices) {
-  const currentPrice = prices[prices.length - 1];
-  const previousPrice = prices[prices.length - 2];
-  if (currentPrice > previousPrice) {
-    return 'восходящий';
-  } else if (currentPrice < previousPrice) {
-    return 'нисходящий';
-  } else {
-    return 'боковой';
-  }
-}
+const monthPrices = prices.slice(-720); // 720 часовых свечей = месяц
 
-function calculateActivity(prices) {
-  const currentPrice = prices[prices.length - 1];
-  const minPrice = Math.min(...prices);
-  const maxPrice = Math.max(...prices);
-  const activity = ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100;
-  return activity.toFixed(2);
-}
+const average = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
 
-module.exports = {
-  calculateLevels,
-  calculateTrend,
-  calculateActivity,
-};
+const currentPrice = prices[prices.length - 1];
+const monthAverage = average(monthPrices);
+const trend = currentPrice > monthAverage ? 'восходящий' : currentPrice < monthAverage ? 'нисходящий' : 'боковой';
+const volatility = Math.round(100 * (Math.max(...prices) - Math.min(...prices)) / monthAverage);
+const support = Math.min(...monthPrices);
+const resistance = Math.max(...monthPrices);
+
+console.log(`Текущая цена: ${currentPrice}`);
+console.log(`Текущий тренд: ${trend}`);
+console.log(`Волатильность: ${volatility}%`);
+console.log(`Уровень поддержки: ${support}`);
+console.log(`Уровень сопротивления: ${resistance}`);
