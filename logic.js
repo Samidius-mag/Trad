@@ -1,5 +1,7 @@
 const fs = require('fs');
-
+fs.readFile('price.json', (err, data) => {
+  if (err) throw err;
+  const prices = JSON.parse(data).map(candle => candle[4]);
 const calculateActivity = (prices) => {
   const currentPrice = prices[prices.length - 1];
   const minPrice = Math.min(...prices);
@@ -101,9 +103,7 @@ const calculateCurrentPrice = (prices) => {
   return currentPrice;
 };
 
-fs.readFile('price.json', (err, data) => {
-  if (err) throw err;
-  const prices = JSON.parse(data).map(candle => candle[4]);
+
 
   const activity = calculateActivity(prices);
   const volatility = calculateVolatility(prices);
