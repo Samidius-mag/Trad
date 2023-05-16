@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const SUPPORT_LEVELS = [0.9, 0.8, 0.7];
 const RESISTANCE_LEVELS = [1.1, 1.2, 1.3];
 
@@ -30,16 +28,8 @@ function calculateActivity(prices) {
   return activity.toFixed(2);
 }
 
-fs.readFile('price.json', (err, data) => {
-  if (err) throw err;
-  const prices = JSON.parse(data).map(candle => parseFloat(candle.close));
-  const currentPrice = prices[prices.length - 1];
-  const { supportLevels, resistanceLevels } = calculateLevels(prices);
-  const trend = calculateTrend(prices);
-  const activity = calculateActivity(prices);
-  console.log(`Текущая цена: ${currentPrice}`);
-  console.log(`Уровни поддержки: ${supportLevels.join(', ')}`);
-  console.log(`Уровни сопротивления: ${resistanceLevels.join(', ')}`);
-  console.log(`Направление тренда: ${trend}`);
-  console.log(`Активность на рынке: ${activity}%`);
-});
+module.exports = {
+  calculateLevels,
+  calculateTrend,
+  calculateActivity,
+};
