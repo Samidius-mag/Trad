@@ -1,25 +1,30 @@
-const https = require('https');
+const axios = require('axios');
 const fs = require('fs');
 
-const interval = 20000; // 20 seconds
-const limit = 5000;
-const symbol = 'BTCUSDT';
+const url = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=5000';
 
-function loadPrice() {
-  https.get(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=${limit}`, (res) => {
-    let data = '';
-    res.on('data', (chunk) => {
-      data += chunk;
+axios.get(url)
+  .then(response => {
+    const data = response.data.map(candle => ({
+      openTime: candle[0],
+      open: candle[1],
+      high: candle[2],
+      low: candle[3],
+      close: candle[4],
+      volume: candle[5],
+      closeTime: candle[6],
+      quoteAssetVolume: candle[7],
+      numberOfTrades: candle[8],
+      takerBuyBaseAssetVolume: candle[9],
+      takerBuyQuoteAssetVolume: candle[10],
+      ignore: candle[11]
+    }));
+
+    fs.writeFile('price.json', JSON.stringify(data), err => {
+      if (err) throw err;
+      console.log('Записано');
     });
-    res.on('end', () => {
-      const candles = JSON.parse(data);
-      const prices = candles.map(candle => parseFloat(candle[4]));
-      fs.writeFileSync('price.json', JSON.stringify(prices));
-    });
-  }).on('error', (err) => {
-    console.error(err);
+  })
+  .catch(error => {
+    console.log(error);
   });
-}
-
-loadPrice();
-setInterval(loadPrice, interval);
