@@ -31,7 +31,7 @@ fs.readFile('price.json', (err, data) => {
   const currentPrice = prices[prices.length - 1];
 
   const volatility = roc.reduce((sum, value) => {
-    return sum + Math.abs(value);
+    return sum + Math.abs(value)*69;
   }, 0) / roc.length;
 
   console.log(`Тренд: ${trend}`);
