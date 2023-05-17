@@ -120,20 +120,3 @@ const recommendation = (priceArray, hours) => {
     return 'ожидать';
   }
 };
-
-module.exports = {
-  priceChangeSpeed,
-  relativeVolatilityIndex,
-  linearRegressionChannel,
-  ema21,
-  ema55,
-  ema89,
-  ema144,
-  ema233,
-  trendDirection,
-  supportResistanceLevels,
-  possibleReversalPoints,
-  currentPrice,
-  currentOverboughtOversold,
-  recommendation
-};
