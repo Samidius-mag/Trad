@@ -65,17 +65,18 @@ const fib144 = calculateFibonacciLevels(prices, 144);
 const fib233 = calculateFibonacciLevels(prices, 233);
 const fib13 = calculateFibonacciLevels(prices, 13);
 const pivotPoints = [
-  { level: fib13[0], type: 'поддержка' },
-  { level: fib13[1], type: 'поддержка' },
-  { level: fib13[2], type: 'поддержка' },
-  { level: fib13[11], type: 'сопротивление' },
-  { level: fib13[12], type: 'сопротивление' },
+  { level: fib13[11], type: 'поддержка' },
+  { level: fib13[10], type: 'поддержка' },
+  { level: fib13[9], type: 'поддержка' },
+  { level: fib13[3], type: 'сопротивление' },
+  { level: fib13[2], type: 'сопротивление' },
+  { level: fib13[1], type: 'сопротивление' },
 ];
 const reversalPoints = [
-  { level: fib13[0], type: 'поддержка' },
-  { level: fib13[1], type: 'поддержка' },
-  { level: fib13[11], type: 'сопротивление' },
-  { level: fib13[12], type: 'сопротивление' },
+  { level: fib13[12], type: 'поддержка' },
+  { level: fib13[9], type: 'поддержка' },
+  { level: fib13[3], type: 'сопротивление' },
+  { level: fib13[0], type: 'сопротивление' },
 ];
 const rsi1h = calculateRSI(pricesClose, 14);
 const rsi4h = calculateRSI(pricesClose, 56);
