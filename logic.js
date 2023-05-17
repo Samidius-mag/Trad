@@ -1,238 +1,123 @@
-const fs = require('fs');
-const { EMA } = require('technicalindicators');
+const prices = require('./price.json');
 
-// Load price data from file
-const prices = JSON.parse(fs.readFileSync('price.json'));
+function calculateEMA(prices, period) {
+  const k = 2 / (period + 1);
+  let ema = prices.slice(0, period).reduce((sum, price) => sum + price, 0) / period;
 
-// Calculate price change velocity
-const velocity = [];
-for (let i = 1; i < prices.length; i++) {
-  const change = prices[i].close - prices[i - 1].close;
-  const time = prices[i].openTime - prices[i - 1].openTime;
-  velocity.push(change / time);
-}
-
-// Calculate relative volatility index
-const rvi = [];
-for (let i = 0; i < prices.length; i++) {
-  const high = prices[i].high;
-  const low = prices[i].low;
-  const close = prices[i].close;
-  const rviValue = (high - close) / (high - low);
-  rvi.push(rviValue);
-}
-
-// Calculate linear regression channel
-const regressionPeriod = 20;
-const regressionSlope = [];
-const regressionIntercept = [];
-for (let i = regressionPeriod; i < prices.length; i++) {
-  const x = [];
-  const y = [];
-  for (let j = i - regressionPeriod; j < i; j++) {
-    x.push(j);
-    y.push(prices[j].close);
+  for (let i = period; i < prices.length; i++) {
+    ema = (prices[i] - ema) * k + ema;
   }
-  const regression = linearRegression(x, y);
-  regressionSlope.push(regression.slope);
-  regressionIntercept.push(regression.intercept);
+
+  return ema;
 }
 
-// Calculate EMA
-const ema21 = EMA.calculate({ period: 21, values: prices.map(p => p.close) });
-const ema55 = EMA.calculate({ period: 55, values: prices.map(p => p.close) });
-const ema89 = EMA.calculate({ period: 89, values: prices.map(p => p.close) });
-const ema144 = EMA.calculate({ period: 144, values: prices.map(p => p.close) });
-const ema233 = EMA.calculate({ period: 233, values: prices.map(p => p.close) });
-
-// Calculate detrended price oscillator
-const dpoPeriod = 20;
-const dpo = [];
-for (let i = dpoPeriod; i < prices.length; i++) {
-  const dpoValue = prices[i].close - ema55[i - Math.floor(dpoPeriod / 2) - 1];
-  dpo.push(dpoValue);
+function calculateSMA(prices, period) {
+  return prices.slice(-period).reduce((sum, price) => sum + price, 0) / period;
 }
 
-// Calculate trend direction for different timeframes
-const trend1h = getTrend(prices, 1);
-const trend4h = getTrend(prices, 4);
-const trend12h = getTrend(prices, 12);
-const trend24h = getTrend(prices, 24);
+function calculateFibonacciLevels(prices, period) {
+  const high = Math.max(...prices.slice(-period).map(candle => candle.high));
+  const low = Math.min(...prices.slice(-period).map(candle => candle.low));
+  const range = high - low;
+  const levels = [];
 
-// Calculate support and resistance levels
-const support1 = getSupportResistance(prices, 'support', 1);
-const support2 = getSupportResistance(prices, 'support', 2);
-const support3 = getSupportResistance(prices, 'support', 3);
-const resistance1 = getSupportResistance(prices, 'resistance', 1);
-const resistance2 = getSupportResistance(prices, 'resistance', 2);
-const resistance3 = getSupportResistance(prices, 'resistance', 3);
+  for (let i = 0; i <= 13; i++) {
+    const level = high - range * (i / 13);
+    levels.push(level.toFixed(2));
+  }
 
-// Calculate possible reversal points
-const reversalPoints = getReversalPoints(prices);
+  return levels;
+}
 
-// Calculate current price
+function calculateRSI(prices, period) {
+  const changes = prices.slice(1).map((price, i) => price - prices[i]);
+  const gains = changes.map(change => change > 0 ? change : 0);
+  const losses = changes.map(change => change < 0 ? -change : 0);
+  const avgGain = gains.slice(0, period).reduce((sum, gain) => sum + gain, 0) / period;
+  const avgLoss = losses.slice(0, period).reduce((sum, loss) => sum + loss, 0) / period;
+  const rs = avgGain / avgLoss;
+  const rsi = 100 - (100 / (1 + rs));
+  return rsi;
+}
+
+const pricesClose = prices.map(candle => candle.close);
 const currentPrice = prices[prices.length - 1].close;
+const prevPrice = prices[prices.length - 2].close;
+const priceChange = currentPrice - prevPrice;
+const priceChangePercent = (priceChange / prevPrice) * 100;
+const ema21 = calculateEMA(pricesClose, 21);
+const ema55 = calculateEMA(pricesClose, 55);
+const ema89 = calculateEMA(pricesClose, 89);
+const ema144 = calculateEMA(pricesClose, 144);
+const ema233 = calculateEMA(pricesClose, 233);
+const sma1h = calculateSMA(pricesClose, 1);
+const sma4h = calculateSMA(pricesClose, 4);
+const sma12h = calculateSMA(pricesClose, 12);
+const sma24h = calculateSMA(pricesClose, 24);
+const trend1h = currentPrice > sma1h ? 'восходящий' : currentPrice < sma1h ? 'нисходящий' : 'боковой';
+const trend4h = currentPrice > sma4h ? 'восходящий' : currentPrice < sma4h ? 'нисходящий' : 'боковой';
+const trend12h = currentPrice > sma12h ? 'восходящий' : currentPrice < sma12h ? 'нисходящий' : 'боковой';
+const trend24h = currentPrice > sma24h ? 'восходящий' : currentPrice < sma24h ? 'нисходящий' : 'боковой';
+const fib21 = calculateFibonacciLevels(prices, 21);
+const fib55 = calculateFibonacciLevels(prices, 55);
+const fib89 = calculateFibonacciLevels(prices, 89);
+const fib144 = calculateFibonacciLevels(prices, 144);
+const fib233 = calculateFibonacciLevels(prices, 233);
+const fib13 = calculateFibonacciLevels(prices, 13);
+const pivotPoints = [
+  { level: fib13[0], type: 'поддержка' },
+  { level: fib13[1], type: 'поддержка' },
+  { level: fib13[2], type: 'поддержка' },
+  { level: fib13[11], type: 'сопротивление' },
+  { level: fib13[12], type: 'сопротивление' },
+];
+const reversalPoints = [
+  { level: fib13[0], type: 'поддержка' },
+  { level: fib13[1], type: 'поддержка' },
+  { level: fib13[11], type: 'сопротивление' },
+  { level: fib13[12], type: 'сопротивление' },
+];
+const rsi1h = calculateRSI(pricesClose, 14);
+const rsi4h = calculateRSI(pricesClose, 56);
+const rsi12h = calculateRSI(pricesClose, 168);
+const rsi24h = calculateRSI(pricesClose, 336);
+const overbought1h = rsi1h > 70;
+const oversold1h = rsi1h < 30;
+const overbought4h = rsi4h > 70;
+const oversold4h = rsi4h < 30;
+const overbought12h = rsi12h > 70;
+const oversold12h = rsi12h < 30;
+const overbought24h = rsi24h > 70;
+const oversold24h = rsi24h < 30;
+let recommendation = 'ожидание';
 
-// Calculate current market sentiment
-const marketSentiment = getMarketSentiment(prices);
-
-// Make trading recommendation
-const recommendation = getTradingRecommendation(prices);
-
-// Print results
-//console.log(`Активность: ${velocity}`);
-//console.log(`Волатильность: ${rvi}`);
-//console.log(`Канал н: ${regressionSlope}`);
-//console.log(`Канал в: ${regressionIntercept}`);
-//console.log(`ДПО: ${dpo}`);
-console.log(`Тренд (1h): ${trend1h}`);
-console.log(`Тренд (4h): ${trend4h}`);
-console.log(`Тренд (12h): ${trend12h}`);
-console.log(`Тренд (24h): ${trend24h}`);
-console.log(`Поддержка: ${support1}, ${support2}, ${support3}`);
-console.log(`Сопротивление: ${resistance1}, ${resistance2}, ${resistance3}`);
-console.log(`Разворот: ${reversalPoints}`);
-console.log(`Цена: ${currentPrice}`);
-console.log(`Перекуп\Перепрод: ${marketSentiment}`);
-console.log(`Рекомендую: ${recommendation}`);
-
-// Helper function to calculate linear regression
-function linearRegression(x, y) {
-  const n = x.length;
-  let sumX = 0;
-  let sumY = 0;
-  let sumXY = 0;
-  let sumXX = 0;
-  let sumYY = 0;
-
-  for (let i = 0; i < n; i++) {
-    sumX += x[i];
-    sumY += y[i];
-    sumXY += x[i] * y[i];
-    sumXX += x[i] * x[i];
-    sumYY += y[i] * y[i];
-  }
-
-  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  const intercept = (sumY - slope * sumX) / n;
-
-  return { slope, intercept };
+if (trend1h === 'восходящий' && currentPrice > fib13[0]) {
+  recommendation = 'покупка';
+} else if (trend1h === 'нисходящий' && currentPrice < fib13[0]) {
+  recommendation = 'продажа';
+} else if (trend1h === 'боковой' || (currentPrice > fib13[1] && currentPrice < fib13[0])) {
+  recommendation = 'ожидание';
 }
 
-// Helper function to calculate trend direction for a given timeframe
-function getTrend(prices, hours) {
-  const period = hours * 60;
-  const ema = EMA.calculate({ period, values: prices.map(p => p.close) });
-  const currentPrice = prices[prices.length - 1].close;
-  const emaValue = ema[ema.length - 1];
-  if (currentPrice > emaValue) {
-    return 'Восходящий';
-  } else if (currentPrice < emaValue) {
-    return 'Нисходящий';
-  } else {
-    return 'Боковой';
-  }
-}
-
-// Helper function to calculate support and resistance levels
-function getSupportResistance(prices, type, level) {
-  const highs = prices.map(p => p.high);
-  const lows = prices.map(p => p.low);
-  const closes = prices.map(p => p.close);
-  const pivot = (highs[0] + lows[0] + closes[0]) / 3;
-  const r1 = 2 * pivot - lows[0];
-  const s1 = 2 * pivot - highs[0];
-  const r2 = pivot + (highs[0] - lows[0]);
-  const s2 = pivot - (highs[0] - lows[0]);
-  const r3 = highs[0] + 2 * (pivot - lows[0]);
-  const s3 = lows[0] - 2 * (highs[0] - pivot);
-  if (type === 'support') {
-    if (level === 1) {
-      return s1;
-    } else if (level === 2) {
-      return s2;
-    } else if (level === 3) {
-      return s3;
-    }
-  } else if (type === 'resistance') {
-    if (level === 1) {
-      return r1;
-    } else if (level === 2) {
-      return r2;
-    } else if (level === 3) {
-      return r3;
-    }
-  }
-}
-
-// Helper function to calculate possible reversal points
-function getReversalPoints(prices) {
-  const highs = prices.map(p => p.high);
-  const lows = prices.map(p => p.low);
-  const closes = prices.map(p => p.close);
-  const pivot = (highs[0] + lows[0] + closes[0]) / 3;
-  const r1 = 2 * pivot - lows[0];
-  const s1 = 2 * pivot - highs[0];
-  const r2 = pivot + (highs[0] - lows[0]);
-  const s2 = pivot - (highs[0] - lows[0]);
-  const r3 = highs[0] + 2 * (pivot - lows[0]);
-  const s3 = lows[0] - 2 * (highs[0] - pivot);
-  const reversalPoints = [];
-  if (closes[0] < s1) {
-    reversalPoints.push(s1);
-  }
-  if (closes[0] < s2) {
-    reversalPoints.push(s2);
-  }
-  if (closes[0] < s3) {
-    reversalPoints.push(s3);
-  }
-  if (closes[0] > r1) {
-    reversalPoints.push(r1);
-  }
-  if (closes[0] > r2) {
-    reversalPoints.push(r2);
-  }
-  if (closes[0] > r3) {
-    reversalPoints.push(r3);
-  }
-  return reversalPoints;
-}
-
-// Helper function to calculate current market sentiment
-function getMarketSentiment(prices) {
-  const highs = prices.map(p => p.high);
-  const lows = prices.map(p => p.low);
-  const closes = prices.map(p => p.close);
-  const pivot = (highs[0] + lows[0] + closes[0]) / 3;
-  const r1 = 2 * pivot - lows[0];
-  const s1 = 2 * pivot - highs[0];
-  const r2 = pivot + (highs[0] - lows[0]);
-  const s2 = pivot - (highs[0] - lows[0]);
-  const r3 = highs[0] + 2 * (pivot - lows[0]);
-  const s3 = lows[0] - 2 * (highs[0] - pivot);
-  const sentiment = (closes[0] - s1) / (r1 - s1);
-  return sentiment;
-}
-
-// Helper function to make trading recommendation
-function getTradingRecommendation(prices) {
-  const highs = prices.map(p => p.high);
-  const lows = prices.map(p => p.low);
-  const closes = prices.map(p => p.close);
-  const pivot = (highs[0] + lows[0] + closes[0]) / 3;
-  const r1 = 2 * pivot - lows[0];
-  const s1 = 2 * pivot - highs[0];
-  const r2 = pivot + (highs[0] - lows[0]);
-  const s2 = pivot - (highs[0] - lows[0]);
-  const r3 = highs[0] + 2 * (pivot - lows[0]);
-  const s3 = lows[0] - 2 * (highs[0] - pivot);
-  const sentiment = (closes[0] - s1) / (r1 - s1);
-  if (sentiment < 0.2) {
-    return 'Покупать';
-  } else if (sentiment > 0.8) {
-    return 'Продавать';
-  } else {
-    return 'Ждать';
-  }
-}
+console.log(Текущая цена: ${currentPrice.toFixed(2)});
+console.log(Изменение цены: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%));
+//console.log(EMA21: ${ema21.toFixed(2)});
+//console.log(EMA55: ${ema55.toFixed(2)});
+//console.log(EMA89: ${ema89.toFixed(2)});
+//console.log(EMA144: ${ema144.toFixed(2)});
+//console.log(EMA233: ${ema233.toFixed(2)});
+//console.log(SMA1h: ${sma1h.toFixed(2)} (${trend1h}));
+//console.log(SMA4h: ${sma4h.toFixed(2)} (${trend4h}));
+//console.log(SMA12h: ${sma12h.toFixed(2)} (${trend12h}));
+//console.log(SMA24h: ${sma24h.toFixed(2)} (${trend24h}));
+//console.log(Fibonacci 21: ${fib21.join(', ')});
+//console.log(Fibonacci 55: ${fib55.join(', ')});
+//console.log(Fibonacci 89: ${fib89.join(', ')});
+//console.log(Fibonacci 144: ${fib144.join(', ')});
+//console.log(Fibonacci 233: ${fib233.join(', ')});
+console.log(Pivot Points: ${pivotPoints.map(point => ${point.type} ${point.level}).join(', ')});
+console.log(Reversal Points: ${reversalPoints.map(point => ${point.type} ${point.level}).join(', ')});
+console.log(RSI1h: ${rsi1h.toFixed(2)} (${oversold1h ? 'oversold' : overbought1h ? 'overbought' : 'neutral'}));
+console.log(RSI4h: ${rsi4h.toFixed(2)} (${oversold4h ? 'oversold' : overbought4h ? 'overbought' : 'neutral'}));
+console.log(RSI12h: ${rsi12h.toFixed(2)} (${oversold12h ? 'oversold' : overbought12h ? 'overbought' : 'neutral'}));
+console.log(RSI24h: ${rsi24h.toFixed(2)} (${oversold24h ? 'oversold' : overbought24h ? 'overbought' : 'neutral'}));
