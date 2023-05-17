@@ -54,10 +54,10 @@ const sma1h = calculateSMA(pricesClose, 1);
 const sma4h = calculateSMA(pricesClose, 4);
 const sma12h = calculateSMA(pricesClose, 12);
 const sma24h = calculateSMA(pricesClose, 24);
-const trend1h = currentPrice > sma1h ? 'восходящий' : currentPrice < sma1h ? 'нисходящий' : 'боковой';
-const trend4h = currentPrice > sma4h ? 'восходящий' : currentPrice < sma4h ? 'нисходящий' : 'боковой';
-const trend12h = currentPrice > sma12h ? 'восходящий' : currentPrice < sma12h ? 'нисходящий' : 'боковой';
-const trend24h = currentPrice > sma24h ? 'восходящий' : currentPrice < sma24h ? 'нисходящий' : 'боковой';
+const trend1h = currentPrice > sma1h ? 'вверх' : currentPrice < sma1h ? 'вниз' : 'боковик';
+const trend4h = currentPrice > sma4h ? 'вверх' : currentPrice < sma4h ? 'вниз' : 'боковик';
+const trend12h = currentPrice > sma12h ? 'вверх' : currentPrice < sma12h ? 'вниз' : 'боковик';
+const trend24h = currentPrice > sma24h ? 'вверх' : currentPrice < sma24h ? 'вниз' : 'боковик';
 const fib21 = calculateFibonacciLevels(prices, 21);
 const fib55 = calculateFibonacciLevels(prices, 55);
 const fib89 = calculateFibonacciLevels(prices, 89);
@@ -78,10 +78,10 @@ const reversalPoints = [
   { level: fib13[3], type: 'сопр' },
   { level: fib13[0], type: 'сопр' },
 ];
-const rsi1h = calculateRSI(pricesClose, 14);
-const rsi4h = calculateRSI(pricesClose, 56);
-const rsi12h = calculateRSI(pricesClose, 168);
-const rsi24h = calculateRSI(pricesClose, 336);
+const rsi1h = calculateRSI(pricesClose, 21);
+const rsi4h = calculateRSI(pricesClose, 55);
+const rsi12h = calculateRSI(pricesClose, 89);
+const rsi24h = calculateRSI(pricesClose, 144);
 const overbought1h = rsi1h > 70;
 const oversold1h = rsi1h < 30;
 const overbought4h = rsi4h > 70;
@@ -108,18 +108,24 @@ console.log(`Рекомендация: ${recommendation}`);
 //console.log(EMA89: ${ema89.toFixed(2)});
 //console.log(EMA144: ${ema144.toFixed(2)});
 //console.log(EMA233: ${ema233.toFixed(2)});
-console.log(`SMA1h: ${sma1h.toFixed(2)} (${trend1h})`);
-console.log(`SMA4h: ${sma4h.toFixed(2)} (${trend4h})`);
-console.log(`SMA12h: ${sma12h.toFixed(2)} (${trend12h})`);
-console.log(`SMA24h: ${sma24h.toFixed(2)} (${trend24h})`);
+console.log(`Тренд 1h: ${sma1h.toFixed(2)} (${trend1h})`);
+console.log(`Тренд 4h: ${sma4h.toFixed(2)} (${trend4h})`);
+console.log(`Тренд 12h: ${sma12h.toFixed(2)} (${trend12h})`);
+console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
 //console.log(Fibonacci 21: ${fib21.join(', ')});
 //console.log(Fibonacci 55: ${fib55.join(', ')});
 //console.log(Fibonacci 89: ${fib89.join(', ')});
 //console.log(Fibonacci 144: ${fib144.join(', ')});
 //console.log(Fibonacci 233: ${fib233.join(', ')});
-console.log(`П/С: ${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
-console.log(`Разворот: ${reversalPoints.map(point => `${point.level}`).join(', ')}`);
-console.log(`RSI1h: ${rsi1h.toFixed(2)} (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`RSI4h: ${rsi4h.toFixed(2)} (${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`RSI12h: ${rsi12h.toFixed(2)} (${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`RSI24h: ${rsi24h.toFixed(2)} (${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`П/С: 
+${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
+console.log(`Разворот:
+${reversalPoints.map(point => `${point.level}`).join(', ')}`);
+console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
+(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
+(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 2h: ${rsi12h.toFixed(2)} 
+(${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
+(${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
