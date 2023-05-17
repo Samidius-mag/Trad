@@ -1,58 +1,46 @@
 const fs = require('fs');
 const { ROC } = require('technicalindicators');
 
-const data = fs.readFileSync('price.json');
-const prices = JSON.parse(data);
+fs.readFile('price.json', (err, data) => {
+  if (err) throw err;
 
-const roc = ROC.calculate({ period: 12, values: prices });
+  const prices = JSON.parse(data);
 
-const lastMonthPrices = prices.slice(-720);
-const lastMonthMax = Math.max(...lastMonthPrices);
-const lastMonthMin = Math.min(...lastMonthPrices);
-const lastMonthAvg = lastMonthPrices.reduce((a, b) => a + b, 0) / lastMonthPrices.length;
+  const roc = ROC.calculate({ period: 14, values: prices });
 
-const todayPrices = prices.slice(-24);
-const todayMax = Math.max(...todayPrices);
-const todayMin = Math.min(...todayPrices);
-const todayAvg = todayPrices.reduce((a, b) => a + b, 0) / todayPrices.length;
+  const rvi = roc.reduce((sum, value) => {
+    return sum + value;
+  }, 0) / roc.length;
 
-const currentPrice = prices[prices.length - 1];
+  let trend = '';
+  if (rvi > 0.5) {
+    trend = 'восходящий';
+  } else if (rvi < -0.5) {
+    trend = 'нисходящий';
+  } else {
+    trend = 'боковой';
+  }
 
-const trendSpeed = roc[roc.length - 1];
-const volatility = (lastMonthMax - lastMonthMin) / lastMonthAvg;
+  const support = Math.min(...prices);
+  const resistance = Math.max(...prices);
 
-let trend;
-if (trendSpeed > 1) {
-  trend = 'Восходящий';
-} else if (trendSpeed < -1) {
-  trend = 'Нисходящий';
-} else {
-  trend = 'Боковой';
-}
+  const monthlyTrend = prices[0] < prices[prices.length - 1] ? 'восходящий' : 'нисходящий';
+  const dailyTrend = prices[prices.length - 2] < prices[prices.length - 1] ? 'восходящий' : 'нисходящий';
+  const currentTrend = prices[prices.length - 1] > prices[prices.length - 2] ? 'восходящий' : 'нисходящий';
 
-let support;
-if (currentPrice < todayMin) {
-  support = todayMin;
-} else if (currentPrice < lastMonthMin) {
-  support = lastMonthMin;
-} else {
-  support = null;
-}
+  const currentPrice = prices[prices.length - 1];
 
-let resistance;
-if (currentPrice > todayMax) {
-  resistance = todayMax;
-} else if (currentPrice > lastMonthMax) {
-  resistance = lastMonthMax;
-} else {
-  resistance = null;
-}
+  const volatility = roc.reduce((sum, value) => {
+    return sum + Math.abs(value);
+  }, 0) / roc.length;
 
-console.log({
-  trend,
-  support,
-  resistance,
-  currentPrice,
-  trendSpeed,
-  volatility,
+  console.log(`Тренд: ${trend}`);
+  console.log(`Уровень поддержки: ${support}`);
+  console.log(`Уровень сопротивления: ${resistance}`);
+  console.log(`Месячный тренд: ${monthlyTrend}`);
+  console.log(`Дневной тренд: ${dailyTrend}`);
+  console.log(`Текущий тренд: ${currentTrend}`);
+  console.log(`Текущая цена: ${currentPrice}`);
+  console.log(`Скорость движения рынка: ${rvi}`);
+  console.log(`Волатильность: ${volatility}`);
 });
