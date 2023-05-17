@@ -5,10 +5,23 @@ const url = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&li
 
 axios.get(url)
   .then(response => {
-    const prices = response.data.map(candle => parseFloat(candle[4]));
-    fs.writeFile('price.json', JSON.stringify(prices), (err) => {
+    const data = response.data.map(candle => ({
+      time: candle[0],
+      open: parseFloat(candle[1]),
+      high: parseFloat(candle[2]),
+      low: parseFloat(candle[3]),
+      close: parseFloat(candle[4]),
+      volume: parseFloat(candle[5]),
+      closeTime: candle[6],
+      quoteAssetVolume: parseFloat(candle[7]),
+      numberOfTrades: candle[8],
+      takerBuyBaseAssetVolume: parseFloat(candle[9]),
+      takerBuyQuoteAssetVolume: parseFloat(candle[10])
+    }));
+
+    fs.writeFile('price.json', JSON.stringify(data), err => {
       if (err) throw err;
-      console.log('записано');
+      console.log('Записано');
     });
   })
   .catch(error => {
