@@ -80,8 +80,8 @@ const marketSentiment = getMarketSentiment(prices);
 const recommendation = getTradingRecommendation(prices);
 
 // Print results
-console.log(`Активность: ${velocity}`);
-console.log(`Волатильность: ${rvi}`);
+//console.log(`Активность: ${velocity}`);
+//console.log(`Волатильность: ${rvi}`);
 console.log(`Канал н: ${regressionSlope}`);
 console.log(`Канал в: ${regressionIntercept}`);
 console.log(`ДПО: ${dpo}`);
@@ -126,11 +126,11 @@ function getTrend(prices, hours) {
   const currentPrice = prices[prices.length - 1].close;
   const emaValue = ema[ema.length - 1];
   if (currentPrice > emaValue) {
-    return 'up';
+    return 'Восходящий';
   } else if (currentPrice < emaValue) {
-    return 'down';
+    return 'Нисходящий';
   } else {
-    return 'sideways';
+    return 'Боковой';
   }
 }
 
@@ -229,10 +229,10 @@ function getTradingRecommendation(prices) {
   const s3 = lows[0] - 2 * (highs[0] - pivot);
   const sentiment = (closes[0] - s1) / (r1 - s1);
   if (sentiment < 0.2) {
-    return 'buy';
+    return 'Покупать';
   } else if (sentiment > 0.8) {
-    return 'sell';
+    return 'Продавать';
   } else {
-    return 'hold';
+    return 'Ждать';
   }
 }
