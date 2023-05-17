@@ -80,26 +80,21 @@ const marketSentiment = getMarketSentiment(prices);
 const recommendation = getTradingRecommendation(prices);
 
 // Print results
-console.log(`Price change velocity: ${velocity}`);
-console.log(`Relative volatility index: ${rvi}`);
-console.log(`Linear regression channel slope: ${regressionSlope}`);
-console.log(`Linear regression channel intercept: ${regressionIntercept}`);
-console.log(`EMA 21: ${ema21}`);
-console.log(`EMA 55: ${ema55}`);
-console.log(`EMA 89: ${ema89}`);
-console.log(`EMA 144: ${ema144}`);
-console.log(`EMA 233: ${ema233}`);
-console.log(`Detrended price oscillator: ${dpo}`);
-console.log(`Trend direction (1h): ${trend1h}`);
-console.log(`Trend direction (4h): ${trend4h}`);
-console.log(`Trend direction (12h): ${trend12h}`);
-console.log(`Trend direction (24h): ${trend24h}`);
-console.log(`Support levels: ${support1}, ${support2}, ${support3}`);
-console.log(`Resistance levels: ${resistance1}, ${resistance2}, ${resistance3}`);
-console.log(`Possible reversal points: ${reversalPoints}`);
-console.log(`Current price: ${currentPrice}`);
-console.log(`Market sentiment: ${marketSentiment}`);
-console.log(`Trading recommendation: ${recommendation}`);
+console.log(`Активность: ${velocity}`);
+console.log(`Волатильность: ${rvi}`);
+console.log(`Канал н: ${regressionSlope}`);
+console.log(`Канал в: ${regressionIntercept}`);
+console.log(`ДПО: ${dpo}`);
+console.log(`Тренд (1h): ${trend1h}`);
+console.log(`Тренд (4h): ${trend4h}`);
+console.log(`Тренд (12h): ${trend12h}`);
+console.log(`Тренд (24h): ${trend24h}`);
+console.log(`Поддержка: ${support1}, ${support2}, ${support3}`);
+console.log(`Сопротивление: ${resistance1}, ${resistance2}, ${resistance3}`);
+console.log(`Разворот: ${reversalPoints}`);
+console.log(`Цена: ${currentPrice}`);
+console.log(`Перекуп\Перепрод: ${marketSentiment}`);
+console.log(`Рекомендую: ${recommendation}`);
 
 // Helper function to calculate linear regression
 function linearRegression(x, y) {
