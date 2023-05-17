@@ -101,6 +101,7 @@ if (trend1h === 'восходящий' && currentPrice > fib13[0]) {
 
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение цены: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
+console.log(`Рекомендация: ${recommendation}`);
 //console.log(EMA21: ${ema21.toFixed(2)});
 //console.log(EMA55: ${ema55.toFixed(2)});
 //console.log(EMA89: ${ema89.toFixed(2)});
