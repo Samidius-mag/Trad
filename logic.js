@@ -80,7 +80,7 @@ const marketSentiment = getMarketSentiment(prices);
 const recommendation = getTradingRecommendation(prices);
 
 // Print results
-console.log(`Активность: ${velocity}`);
+//console.log(`Активность: ${velocity}`);
 //console.log(`Волатильность: ${rvi}`);
 //console.log(`Канал н: ${regressionSlope}`);
 //console.log(`Канал в: ${regressionIntercept}`);
