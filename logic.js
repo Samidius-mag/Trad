@@ -115,8 +115,8 @@ console.log(`Изменение цены: ${priceChange.toFixed(2)} (${priceChan
 //console.log(Fibonacci 89: ${fib89.join(', ')});
 //console.log(Fibonacci 144: ${fib144.join(', ')});
 //console.log(Fibonacci 233: ${fib233.join(', ')});
-console.log(`Pivot Points: ${pivotPoints.map(point => ${point.type} ${point.level}).join(', ')}`);
-console.log(`Reversal Points: ${reversalPoints.map(point => ${point.type} ${point.level}).join(', ')}`);
+console.log(`Pivot Points: ${pivotPoints.map(point => ${point.level}).join(', ')}`);
+console.log(`Reversal Points: ${reversalPoints.map(point => ${point.level}).join(', ')}`);
 console.log(`RSI1h: ${rsi1h.toFixed(2)} (${oversold1h ? 'oversold' : overbought1h ? 'overbought' : 'neutral'})`);
 console.log(`RSI4h: ${rsi4h.toFixed(2)} (${oversold4h ? 'oversold' : overbought4h ? 'overbought' : 'neutral'})`);
 console.log(`RSI12h: ${rsi12h.toFixed(2)} (${oversold12h ? 'oversold' : overbought12h ? 'overbought' : 'neutral'})`);
