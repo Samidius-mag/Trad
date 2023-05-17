@@ -1,7 +1,11 @@
 const https = require('https');
 const fs = require('fs');
 
-const url = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=5000';
+const symbol = 'BTCUSDT';
+const interval = '1h';
+const limit = 5000;
+
+const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
 
 https.get(url, (res) => {
   let data = '';
@@ -12,13 +16,16 @@ https.get(url, (res) => {
 
   res.on('end', () => {
     const candles = JSON.parse(data);
-    const prices = candles.map(candle => parseFloat(candle[4]));
+
+    const prices = candles.map((candle) => {
+      return parseFloat(candle[4]);
+    });
+
     fs.writeFile('price.json', JSON.stringify(prices), (err) => {
       if (err) throw err;
-      console.log('Записано');
+      console.log('записано');
     });
   });
-
 }).on('error', (err) => {
   console.log('Ошибка: ' + err.message);
 });
