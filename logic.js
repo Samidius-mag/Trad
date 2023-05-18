@@ -92,11 +92,11 @@ const overbought24h = rsi24h > 70;
 const oversold24h = rsi24h < 30;
 let recommendation = 'ожидание';
 
-if (trend1h === 'восходящий' && currentPrice > fib13[0]) {
+if (trend1h === 'восходящий' && currentPrice > fib13[12]) {
   recommendation = 'покупка';
 } else if (trend1h === 'нисходящий' && currentPrice < fib13[0]) {
   recommendation = 'продажа';
-} else if (trend1h === 'боковой' || (currentPrice > fib13[1] && currentPrice < fib13[0])) {
+} else if (trend1h === 'боковой' || (currentPrice > fib13[1] && currentPrice < fib13[0] && priceChangePercent < 0.10 )) {
   recommendation = 'ожидание';
 }
 
