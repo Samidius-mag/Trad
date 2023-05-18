@@ -96,7 +96,7 @@ if (trend1h === 'восходящий' && currentPrice > fib13[12]) {
   recommendation = 'покупка';
 } else if (trend1h === 'нисходящий' && currentPrice < fib13[0]) {
   recommendation = 'продажа';
-} else if (trend1h === 'боковой' || (currentPrice > fib13[1] && currentPrice < fib13[0] && priceChangePercent < 0.10 )) {
+} else if (trend1h === 'боковой' || (currentPrice > fib13[12] && currentPrice < fib13[0] && priceChangePercent < 0.10 )) {
   recommendation = 'ожидание';
 }
 
