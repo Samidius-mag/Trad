@@ -68,6 +68,8 @@ const pivotPoints = [
   { level: fib13[11], type: 'под' },
   { level: fib13[10], type: 'под' },
   { level: fib13[9], type: 'под' },
+   { level: fib13[8], type: 'под' },
+  { level: fib13[4], type: 'сопр' },
   { level: fib13[3], type: 'сопр' },
   { level: fib13[2], type: 'сопр' },
   { level: fib13[1], type: 'сопр' },
@@ -120,7 +122,7 @@ console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
 console.log(`П/С: 
 ${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот: 
-${reversalPoints.map(point => `${point.level}`).join(', ')}`);
+${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
 (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
