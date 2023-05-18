@@ -125,7 +125,7 @@ console.log(`Масса 1h: ${rsi1h.toFixed(2)}
 (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
 (${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 2h: ${rsi12h.toFixed(2)} 
+console.log(`Масса 12h: ${rsi12h.toFixed(2)} 
 (${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
 (${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
