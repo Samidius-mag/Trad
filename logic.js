@@ -101,7 +101,7 @@ if (trend1h === 'восходящий' && currentPrice > fib13[0]) {
 }
 
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
-console.log(`Изменение цены: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
+console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
 //console.log(EMA21: ${ema21.toFixed(2)});
 //console.log(EMA55: ${ema55.toFixed(2)});
@@ -119,7 +119,7 @@ console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
 //console.log(Fibonacci 233: ${fib233.join(', ')});
 console.log(`П/С: 
 ${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
-console.log(`Разворот:
+console.log(`Разворот: 
 ${reversalPoints.map(point => `${point.level}`).join(', ')}`);
 console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
 (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
