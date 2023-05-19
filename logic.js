@@ -87,12 +87,12 @@ const rsi1h = calculateRSI(pricesClose, 60);
 const rsi4h = calculateRSI(pricesClose, 240);
 const rsi12h = calculateRSI(pricesClose, 720);
 const rsi24h = calculateRSI(pricesClose, 1440);
-const overbought1h = rsi5m > 70;
-const oversold1h = rsi5m < 30;
-const overbought1h = rsi15m > 70;
-const oversold1h = rsi15m < 30;
-const overbought1h = rsi30m > 70;
-const oversold1h = rsi30m < 30;
+const overbought5m = rsi5m > 70;
+const oversold5m = rsi5m < 30;
+const overbought15m = rsi15m > 70;
+const oversold15m = rsi15m < 30;
+const overbought30m = rsi30m > 70;
+const oversold30m = rsi30m < 30;
 const overbought1h = rsi1h > 70;
 const oversold1h = rsi1h < 30;
 const overbought4h = rsi4h > 70;
@@ -133,11 +133,11 @@ ${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот: 
 ${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Масса 5m: ${rsi5m.toFixed(2)} 
-(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
+(${oversold5m ? 'Перепродано' : overbought5m ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 15m: ${rsi15m.toFixed(2)} 
-(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
+(${oversold15m ? 'Перепродано' : overbought15m ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 30m: ${rsi30m.toFixed(2)} 
-(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
+(${oversold30m ? 'Перепродано' : overbought30m ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
 (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
