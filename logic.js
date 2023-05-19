@@ -54,10 +54,10 @@ const sma1h = calculateSMA(pricesClose, 2);
 const sma4h = calculateSMA(pricesClose, 4);
 const sma12h = calculateSMA(pricesClose, 12);
 const sma24h = calculateSMA(pricesClose, 24);
-const trend1h = currentPrice > sma1h ? 'в верх' : currentPrice < sma1h ? 'вниз' : 'боковик';
-const trend4h = currentPrice > sma4h ? 'в верх' : currentPrice < sma4h ? 'вниз' : 'боковик';
-const trend12h = currentPrice > sma12h ? 'в верх' : currentPrice < sma12h ? 'вниз' : 'боковик';
-const trend24h = currentPrice > sma24h ? 'в верх' : currentPrice < sma24h ? 'вниз' : 'боковик';
+const trend1h = currentPrice > sma1h ? 'вверх' : currentPrice < sma1h ? 'вниз' : 'боковик';
+const trend4h = currentPrice > sma4h ? 'вверх' : currentPrice < sma4h ? 'вниз' : 'боковик';
+const trend12h = currentPrice > sma12h ? 'вверх' : currentPrice < sma12h ? 'вниз' : 'боковик';
+const trend24h = currentPrice > sma24h ? 'вверх' : currentPrice < sma24h ? 'вниз' : 'боковик';
 const fib21 = calculateFibonacciLevels(prices, 21);
 const fib55 = calculateFibonacciLevels(prices, 55);
 const fib89 = calculateFibonacciLevels(prices, 89);
@@ -103,7 +103,7 @@ const overbought24h = rsi24h > 70;
 const oversold24h = rsi24h < 30;
 let recommendation = '';
 
-if (trend1h === 'в верх' && currentPrice > ema21) {
+if (trend1h === 'вверх' && currentPrice > ema21) {
   recommendation = 'покупка';
 } else if (trend1h === 'вниз' && currentPrice < ema233) {
   recommendation = 'продажа';
