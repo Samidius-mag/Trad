@@ -122,11 +122,11 @@ console.log(`Масса 12h: ${rsi12h.toFixed(2)}
 console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
 console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
 (${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
-//console.log(Fibonacci 21: ${fib21.join(', ')});
-//console.log(Fibonacci 55: ${fib55.join(', ')});
-//console.log(Fibonacci 89: ${fib89.join(', ')});
-//console.log(Fibonacci 144: ${fib144.join(', ')});
-//console.log(Fibonacci 233: ${fib233.join(', ')});
+console.log(Fibonacci 21: ${fib21.join(', ')});
+console.log(Fibonacci 55: ${fib55.join(', ')});
+console.log(Fibonacci 89: ${fib89.join(', ')});
+console.log(Fibonacci 144: ${fib144.join(', ')});
+console.log(Fibonacci 233: ${fib233.join(', ')});
 console.log(`П/С: 
 ${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот: 
