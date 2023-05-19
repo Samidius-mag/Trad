@@ -96,9 +96,9 @@ const overbought24h = rsi24h > 70;
 const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
-if (trend1h === 'вверх' && ema21 > ema55 && currentPrice === ema55 && rsi1h === 'Перепродано') {
+if (trend1h === 'вверх' && ema21 > ema55 && currentPrice > ema21) {
   recommendation = 'покупка';
-} else if (trend1h === 'вниз' && ema21 < ema55 && currentPrice === ema21 && rsi1h === 'Перекупленно') {
+} else if (trend1h === 'вниз' && ema21 < ema55 && currentPrice < ema21) {
   recommendation = 'продажа';
 }
 
