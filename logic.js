@@ -81,7 +81,7 @@ const reversalPoints = [
   { level: fib13[0], type: 'сопр' },
 ];
 
-const rsi1h = calculateRSI(pricesClose, 1);
+const rsi1h = calculateRSI(pricesClose, 2);
 const rsi4h = calculateRSI(pricesClose, 4);
 const rsi12h = calculateRSI(pricesClose, 12);
 const rsi24h = calculateRSI(pricesClose, 24);
