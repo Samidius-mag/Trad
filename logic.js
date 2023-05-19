@@ -98,7 +98,7 @@ if (ema21 > ema55 && currentPrice > ema21) {
   recommendation = 'покупка';
 } else if (ema21 < ema55 && currentPrice < ema21) {
   recommendation = 'продажа';
-  } else if (curentPrice < fib13[6] && currentPrice > fib13[9]) {
+  } else  (curentPrice < fib13[6] && currentPrice > fib13[9]) {
   recommendation = 'боковик';
 }
 
