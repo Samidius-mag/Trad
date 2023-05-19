@@ -80,10 +80,13 @@ const reversalPoints = [
   { level: fib13[3], type: 'сопр' },
   { level: fib13[0], type: 'сопр' },
 ];
-const rsi1h = calculateRSI(pricesClose, 21);
-const rsi4h = calculateRSI(pricesClose, 55);
-const rsi12h = calculateRSI(pricesClose, 89);
-const rsi24h = calculateRSI(pricesClose, 144);
+const rsi5m = calculateRSI(pricesClose, 5);
+const rsi15m = calculateRSI(pricesClose, 15);
+const rsi30m = calculateRSI(pricesClose, 30);
+const rsi1h = calculateRSI(pricesClose, 60);
+const rsi4h = calculateRSI(pricesClose, 240);
+const rsi12h = calculateRSI(pricesClose, 720);
+const rsi24h = calculateRSI(pricesClose, 1440);
 const overbought1h = rsi1h > 70;
 const oversold1h = rsi1h < 30;
 const overbought4h = rsi4h > 70;
@@ -98,7 +101,7 @@ if (trend1h === 'восходящий' && currentPrice > fib13[12]) {
   recommendation = 'покупка';
 } else if (trend1h === 'нисходящий' && currentPrice < fib13[0]) {
   recommendation = 'продажа';
-} else if (trend1h === 'боковой' || (currentPrice > fib13[12] && currentPrice < fib13[0] && priceChangePercent < 0.10 )) {
+} else if (trend1h === 'боковой' || (currentPrice > fib13[12] && currentPrice < fib13[0] && priceChangePercent )) {
   recommendation = 'ожидание';
 }
 
@@ -123,6 +126,12 @@ console.log(`П/С:
 ${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот: 
 ${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
+console.log(`Масса 5m: ${rsi5m.toFixed(2)} 
+(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 15m: ${rsi15m.toFixed(2)} 
+(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 30m: ${rsi30m.toFixed(2)} 
+(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
 (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
