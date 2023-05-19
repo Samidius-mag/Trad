@@ -101,14 +101,12 @@ const overbought12h = rsi12h > 70;
 const oversold12h = rsi12h < 30;
 const overbought24h = rsi24h > 70;
 const oversold24h = rsi24h < 30;
-let recommendation = 'ожидание';
+let recommendation = '';
 
 if (trend1h === 'восходящий' && currentPrice > ema21) {
   recommendation = 'покупка';
 } else if (trend1h === 'нисходящий' && currentPrice < ema233) {
   recommendation = 'продажа';
-} else if (trend1h === 'боковой' || (currentPrice > fib13[12] && currentPrice < fib13[0] && priceChangePercent )) {
-  recommendation = 'ожидание';
 }
 
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
