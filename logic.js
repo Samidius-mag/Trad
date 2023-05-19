@@ -75,19 +75,8 @@ const pivotPoints = [
   { level: fib13[1], type: 'сопр' },
 ];
 const reversalPoints = [
-  { level: fib13[12], type: '13' },
-  { level: fib13[11], type: '12' },
-  { level: fib13[10], type: '11' },
-  { level: fib13[9], type: '10' },
-  { level: fib13[8], type: '9' },
-  { level: fib13[7], type: '8' },
-  { level: fib13[6], type: '7' },
-  { level: fib13[5], type: '6' },
-  { level: fib13[4], type: '5' },
-  { level: fib13[3], type: '4' },
-  { level: fib13[2], type: '3' },
-  { level: fib13[1], type: '2' },
-  { level: fib13[0], type: '1' },
+  { level: fib13[12], type: 'Вверх' },
+  { level: fib13[0], type: 'Вниз' },
 ];
 
 const rsi1h = calculateRSI(pricesClose, 2);
@@ -109,6 +98,8 @@ if (ema21 > ema55 && currentPrice > ema21) {
   recommendation = 'покупка';
 } else if (ema21 < ema55 && currentPrice < ema21) {
   recommendation = 'продажа';
+  } else if (curentPrice < fib13[6] && currentPrice > fib13[9]) {
+  recommendation = 'боковик';
 }
 
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
