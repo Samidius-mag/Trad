@@ -101,11 +101,11 @@ const overbought12h = rsi12h > 70;
 const oversold12h = rsi12h < 30;
 const overbought24h = rsi24h > 70;
 const oversold24h = rsi24h < 30;
-let recommendation = '';
+let recommendation = '-';
 
-if (trend1h === 'вверх' && currentPrice > ema21) {
+if (trend1h === 'вверх' && sma1h > sma4h) {
   recommendation = 'покупка';
-} else if (trend1h === 'вниз' && currentPrice < ema233) {
+} else if (trend1h === 'вниз' && sma1h < sma4h) {
   recommendation = 'продажа';
 }
 
