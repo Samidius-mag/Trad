@@ -79,10 +79,10 @@ const reversalPoints = [
   { level: fib13[0], type: 'Вниз' },
 ];
 
-const rsi1h = calculateRSI(pricesClose, 2);
-const rsi4h = calculateRSI(pricesClose, 4);
-const rsi12h = calculateRSI(pricesClose, 12);
-const rsi24h = calculateRSI(pricesClose, 24);
+const rsi1h = calculateRSI(pricesClose, 21);
+const rsi4h = calculateRSI(pricesClose, 55);
+const rsi12h = calculateRSI(pricesClose, 89);
+const rsi24h = calculateRSI(pricesClose, 144);
 
 const overbought1h = rsi1h > 70;
 const oversold1h = rsi1h < 30;
@@ -94,9 +94,9 @@ const overbought24h = rsi24h > 70;
 const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
-if (ema21 > ema55 && currentPrice > ema21) {
+if (ema21 > ema55 && currentPrice > ema21 && currentPrice > fib13[6]) {
   recommendation = 'покупка';
-} else if (ema21 < ema55 && currentPrice < ema21) {
+} else if (ema21 < ema55 && currentPrice < ema21 && currentPrice < fib13[9]) {
   recommendation = 'продажа';
   } else {  (currentPrice < fib13[6] && currentPrice > fib13[9]) 
   recommendation = 'боковик';
