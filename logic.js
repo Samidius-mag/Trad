@@ -118,9 +118,23 @@ console.log(`Рекомендация: ${recommendation}`);
 //console.log(EMA144: ${ema144.toFixed(2)});
 //console.log(EMA233: ${ema233.toFixed(2)});
 console.log(`Тренд 1h: ${sma1h.toFixed(2)} (${trend1h})`);
+console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
+(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 4h: ${sma4h.toFixed(2)} (${trend4h})`);
+console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
+(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 12h: ${sma12h.toFixed(2)} (${trend12h})`);
+console.log(`Масса 12h: ${rsi12h.toFixed(2)} 
+(${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
+console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
+(${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 5m: ${rsi5m.toFixed(2)} 
+(${oversold5m ? 'Перепродано' : overbought5m ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 15m: ${rsi15m.toFixed(2)} 
+(${oversold15m ? 'Перепродано' : overbought15m ? 'Перекупленно' : 'Нейтрально'})`);
+console.log(`Масса 30m: ${rsi30m.toFixed(2)} 
+(${oversold30m ? 'Перепродано' : overbought30m ? 'Перекупленно' : 'Нейтрально'})`);
 //console.log(Fibonacci 21: ${fib21.join(', ')});
 //console.log(Fibonacci 55: ${fib55.join(', ')});
 //console.log(Fibonacci 89: ${fib89.join(', ')});
@@ -130,17 +144,4 @@ console.log(`П/С:
 ${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот: 
 ${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
-console.log(`Масса 5m: ${rsi5m.toFixed(2)} 
-(${oversold5m ? 'Перепродано' : overbought5m ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 15m: ${rsi15m.toFixed(2)} 
-(${oversold15m ? 'Перепродано' : overbought15m ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 30m: ${rsi30m.toFixed(2)} 
-(${oversold30m ? 'Перепродано' : overbought30m ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
-(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
-(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 12h: ${rsi12h.toFixed(2)} 
-(${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
-(${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
+
