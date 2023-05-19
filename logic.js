@@ -105,7 +105,7 @@ let recommendation = '-';
 
 if (trend1h === 'вверх' && ema21 > ema55 && currentPrice > ema55) {
   recommendation = 'покупка';
-} else if (trend1h === 'вниз' && ema21 < ema55 && currentPrice < ema55)) {
+} else if (trend1h === 'вниз' && ema21 < ema55 && currentPrice < ema55) {
   recommendation = 'продажа';
 }
 
