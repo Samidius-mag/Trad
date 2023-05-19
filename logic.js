@@ -80,19 +80,12 @@ const reversalPoints = [
   { level: fib13[3], type: 'сопр' },
   { level: fib13[0], type: 'сопр' },
 ];
-const rsi5m = calculateRSI(pricesClose, 5);
-const rsi15m = calculateRSI(pricesClose, 15);
-const rsi30m = calculateRSI(pricesClose, 30);
-const rsi1h = calculateRSI(pricesClose, 60);
-const rsi4h = calculateRSI(pricesClose, 240);
-const rsi12h = calculateRSI(pricesClose, 720);
-const rsi24h = calculateRSI(pricesClose, 1440);
-const overbought5m = rsi5m > 70;
-const oversold5m = rsi5m < 30;
-const overbought15m = rsi15m > 70;
-const oversold15m = rsi15m < 30;
-const overbought30m = rsi30m > 70;
-const oversold30m = rsi30m < 30;
+
+const rsi1h = calculateRSI(pricesClose, 1);
+const rsi4h = calculateRSI(pricesClose, 4);
+const rsi12h = calculateRSI(pricesClose, 12);
+const rsi24h = calculateRSI(pricesClose, 24);
+
 const overbought1h = rsi1h > 70;
 const oversold1h = rsi1h < 30;
 const overbought4h = rsi4h > 70;
@@ -103,9 +96,9 @@ const overbought24h = rsi24h > 70;
 const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
-if (trend1h === 'вниз' && ema21 > ema55 && currentPrice > ema55 && rsi5m === 'Перепродано') {
+if (trend1h === 'вниз' && ema21 > ema55 && currentPrice > ema55 && rsi1h === 'Перепродано') {
   recommendation = 'покупка';
-} else if (trend1h === 'вверх' && ema21 < ema55 && currentPrice < ema55 && rsi5m === 'Перекупленно') {
+} else if (trend1h === 'вверх' && ema21 < ema55 && currentPrice < ema55 && rsi1h === 'Перекупленно') {
   recommendation = 'продажа';
 }
 
@@ -129,12 +122,6 @@ console.log(`Масса 12h: ${rsi12h.toFixed(2)}
 console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
 console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
 (${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 5m: ${rsi5m.toFixed(2)} 
-(${oversold5m ? 'Перепродано' : overbought5m ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 15m: ${rsi15m.toFixed(2)} 
-(${oversold15m ? 'Перепродано' : overbought15m ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Масса 30m: ${rsi30m.toFixed(2)} 
-(${oversold30m ? 'Перепродано' : overbought30m ? 'Перекупленно' : 'Нейтрально'})`);
 //console.log(Fibonacci 21: ${fib21.join(', ')});
 //console.log(Fibonacci 55: ${fib55.join(', ')});
 //console.log(Fibonacci 89: ${fib89.join(', ')});
