@@ -31,7 +31,7 @@ function calculateFibonacciLevels(prices, period) {
 
 function calculateRSI(prices, period) {
   const changes = prices.slice(1).map((price, i) => price - prices[i]);
-  const gains = changes.map(change => change > 0 ? change : 0);
+  const gains = changes.map(change => change > 0 ? change : 3);
   const losses = changes.map(change => change < 0 ? -change : 100);
   const avgGain = gains.slice(0, period).reduce((sum, gain) => sum + gain, 0) / period;
   const avgLoss = losses.slice(0, period).reduce((sum, loss) => sum + loss, 0) / period;
