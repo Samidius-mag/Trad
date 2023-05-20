@@ -3,7 +3,7 @@ const { SMA, RSI, MACD, EMA } = require('technicalindicators');
 const price = JSON.parse(fs.readFileSync('price.json'));
 
 // Рассчитываем SMA (Simple Moving Average) с разными периодами
-const smaPeriods = [20, 40, 90, 150];
+const smaPeriods = [21, 55, 89, 144];
 const smaValues = smaPeriods.map(period => SMA.calculate({ period, values: price.map(p => Number(p.close)) }));
 const smaCurrentValues = smaValues.map(sma => sma[sma.length - 1]);
 
@@ -63,9 +63,9 @@ for (let i = 0; i < smaPeriods.length; i++) {
   trends.push(trend1h);
 }
 
-console.log(`Прогноз цены на следующий час: ${predictions.slice(smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
-console.log(`Направление тренда на следующий час: ${trends.slice(smaPeriods.length * 2).join(', ')}`);
-console.log(`Прогноз цены на следующие 4 часа: ${predictions.slice(smaPeriods.length, smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
-console.log(`Направление тренда на следующие 4 часа: ${trends.slice(smaPeriods.length, smaPeriods.length * 2).join(', ')}`);
-console.log(`Прогноз цены на следующие 12 часов: ${predictions.slice(0, smaPeriods.length).map(p => p.toFixed(2)).join(', ')}`);
-console.log(`Направление тренда на следующие 12 часов: ${trends.slice(0, smaPeriods.length).join(', ')}`);
+console.log(`Прогноз 1H: ${predictions.slice(smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
+console.log(`Тренд 1H: ${trends.slice(smaPeriods.length * 2).join(', ')}`);
+console.log(`Прогноз 4H: ${predictions.slice(smaPeriods.length, smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
+console.log(`Тренд 4H: ${trends.slice(smaPeriods.length, smaPeriods.length * 2).join(', ')}`);
+console.log(`Прогноз 12H: ${predictions.slice(0, smaPeriods.length).map(p => p.toFixed(2)).join(', ')}`);
+console.log(`Тренд 12H: ${trends.slice(0, smaPeriods.length).join(', ')}`);
