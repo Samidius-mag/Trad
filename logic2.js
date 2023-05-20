@@ -63,9 +63,15 @@ for (let i = 0; i < smaPeriods.length; i++) {
   trends.push(trend1h);
 }
 
-console.log(`Прогноз 1H: ${predictions.slice(smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
-console.log(`Тренд 1H: ${trends.slice(smaPeriods.length * 2).join(', ')}`);
-console.log(`Прогноз 4H: ${predictions.slice(smaPeriods.length, smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
-console.log(`Тренд 4H: ${trends.slice(smaPeriods.length, smaPeriods.length * 2).join(', ')}`);
-console.log(`Прогноз 12H: ${predictions.slice(0, smaPeriods.length).map(p => p.toFixed(2)).join(', ')}`);
-console.log(`Тренд 12H: ${trends.slice(0, smaPeriods.length).join(', ')}`);
+console.log(`Прогноз 1H:
+${predictions.slice(smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
+console.log(`Тренд 1H:
+${trends.slice(smaPeriods.length * 2).join(', ')}`);
+console.log(`Прогноз 4H:
+${predictions.slice(smaPeriods.length, smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
+console.log(`Тренд 4H:
+${trends.slice(smaPeriods.length, smaPeriods.length * 2).join(', ')}`);
+console.log(`Прогноз 12H:
+${predictions.slice(0, smaPeriods.length).map(p => p.toFixed(2)).join(', ')}`);
+console.log(`Тренд 12H:
+${trends.slice(0, smaPeriods.length).join(', ')}`);
