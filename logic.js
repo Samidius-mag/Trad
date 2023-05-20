@@ -29,16 +29,38 @@ function calculateFibonacciLevels(prices, period) {
   return levels;
 }
 
-function calculateRSI(prices, period) {
-  const changes = prices.slice(1).map((price, i) => price - prices[i]);
-  const gains = changes.map(change => change > 0 ? change : 3);
-  const losses = changes.map(change => change < 0 ? -change : 100);
-  const avgGain = gains.slice(0, period).reduce((sum, gain) => sum + gain, 0) / period;
-  const avgLoss = losses.slice(0, period).reduce((sum, loss) => sum + loss, 0) / period;
+function calculateRSI(prices, period = 14) {
+  const deltas = [];
+  for (let i = 1; i < prices.length; i++) {
+    deltas.push(prices[i] - prices[i - 1]);
+  }
+  const gains = deltas.filter(delta => delta > 0);
+  const losses = deltas.filter(delta => delta < 0).map(delta => Math.abs(delta));
+  if (gains.length === 0) {
+    return 0;
+  }
+  if (losses.length === 0) {
+    return 100;
+  }
+  if (gains.length < period || losses.length < period) {
+    return null;
+  }
+  const avgGain = gains.slice(0, period).reduce((acc, val) => acc + val, 0) / period;
+  const avgLoss = losses.slice(0, period).reduce((acc, val) => acc + val, 0) / period;
   const rs = avgGain / avgLoss;
   const rsi = 100 - (100 / (1 + rs));
   return rsi;
 }
+//function calculateRSI(prices, period) {
+  //const changes = prices.slice(1).map((price, i) => price - prices[i]);
+  //const gains = changes.map(change => change > 0 ? change : 3);
+  //const losses = changes.map(change => change < 0 ? -change : 100);
+  //const avgGain = gains.slice(0, period).reduce((sum, gain) => sum + gain, 0) / period;
+ // const avgLoss = losses.slice(0, period).reduce((sum, loss) => sum + loss, 0) / period;
+  //const rs = avgGain / avgLoss;
+  //const rsi = 100 - (100 / (1 + rs));
+  //return rsi;
+//}
 
 const pricesClose = prices.map(candle => candle.close);
 const currentPrice = prices[prices.length - 1].close;
@@ -79,19 +101,19 @@ const reversalPoints = [
   { level: fib13[0], type: 'Вниз' },
 ];
 
-const rsi1h = calculateRSI(pricesClose, 3);
-const rsi4h = calculateRSI(pricesClose, 14);
-const rsi12h = calculateRSI(pricesClose, 56);
-const rsi24h = calculateRSI(pricesClose, 230);
+const rsi1h = calculateRSI();
+//const rsi4h = calculateRSI(pricesClose, 14);
+//const rsi12h = calculateRSI(pricesClose, 56);
+//const rsi24h = calculateRSI(pricesClose, 230);
 
 const overbought1h = rsi1h > 78;
 const oversold1h = rsi1h < 30;
-const overbought4h = rsi4h > 70;
-const oversold4h = rsi4h < 30;
-const overbought12h = rsi12h > 70;
-const oversold12h = rsi12h < 30;
-const overbought24h = rsi24h > 70;
-const oversold24h = rsi24h < 30;
+//const overbought4h = rsi4h > 70;
+//const oversold4h = rsi4h < 30;
+//const overbought12h = rsi12h > 70;
+//const oversold12h = rsi12h < 30;
+//const overbought24h = rsi24h > 70;
+//const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
 if (ema21 > ema55 && currentPrice > ema21 && currentPrice > fib13[6]) {
@@ -114,14 +136,14 @@ console.log(`Тренд 1h: ${sma1h.toFixed(2)} (${trend1h})`);
 console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
 (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 4h: ${sma4h.toFixed(2)} (${trend4h})`);
-console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
-(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
+//console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
+//(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 12h: ${sma12h.toFixed(2)} (${trend12h})`);
-console.log(`Масса 12h: ${rsi12h.toFixed(2)} 
-(${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
+//console.log(`Масса 12h: ${rsi12h.toFixed(2)} 
+//(${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
-console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
-(${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
+//console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
+//(${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
 //console.log(Fibonacci 21: ${fib21.join(', ')});
 //console.log(Fibonacci 55: ${fib55.join(', ')});
 //console.log(Fibonacci 89: ${fib89.join(', ')});
