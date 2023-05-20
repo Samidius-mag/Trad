@@ -80,7 +80,7 @@ const reversalPoints = [
 ];
 
 const rsi1h = calculateRSI(pricesClose, 3);
-const rsi4h = calculateRSI(pricesClose, 28);
+const rsi4h = calculateRSI(pricesClose, 14);
 const rsi12h = calculateRSI(pricesClose, 56);
 const rsi24h = calculateRSI(pricesClose, 230);
 
