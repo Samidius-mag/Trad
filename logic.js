@@ -79,10 +79,10 @@ const reversalPoints = [
   { level: fib13[0], type: 'Вниз' },
 ];
 
-const rsi1h = calculateRSI(pricesClose, 21);
-const rsi4h = calculateRSI(pricesClose, 55);
-const rsi12h = calculateRSI(pricesClose, 89);
-const rsi24h = calculateRSI(pricesClose, 144);
+const rsi1h = calculateRSI(pricesClose, 14);
+const rsi4h = calculateRSI(pricesClose, 28);
+const rsi12h = calculateRSI(pricesClose, 56);
+const rsi24h = calculateRSI(pricesClose, 84);
 
 const overbought1h = rsi1h > 70;
 const oversold1h = rsi1h < 30;
