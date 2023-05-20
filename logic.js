@@ -31,18 +31,18 @@ function calculateFibonacciLevels(prices, period) {
 
 function calculateRSI(prices, period = 14) {
   const deltas = [];
-  for (let i = 1; i < prices.length; i++) {
+  for (let i = 1; i < prices.slice; i++) {
     deltas.push(prices[i] - prices[i - 1]);
   }
   const gains = deltas.filter(delta => delta > 0);
   const losses = deltas.filter(delta => delta < 0).map(delta => Math.abs(delta));
-  if (gains.length === 0) {
+  if (gains.slice === 0) {
     return 0;
   }
-  if (losses.length === 0) {
+  if (losses.slice === 0) {
     return 100;
   }
-  if (gains.length < period || losses.length < period) {
+  if (gains.slice < period || losses.slice < period) {
     return null;
   }
   const avgGain = gains.slice(0, period).reduce((acc, val) => acc + val, 0) / period;
