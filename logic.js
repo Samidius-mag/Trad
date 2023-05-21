@@ -134,6 +134,10 @@ console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
 console.log(`CТОП: ${rsi1h.toFixed(1)} (${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'})`);
+console.log(`СТОП 🔽:
+${oversoldPrice.toFixed(2)})`);
+console.log(`СТОП 🔼:
+${overboughtPrice.toFixed(2)}`);
 console.log(`Тренд 4h: ${sma4h.toFixed(1)} (${trend4h})`);
 //console.log(EMA21: ${ema21.toFixed(2)});
 //console.log(EMA55: ${ema55.toFixed(2)});
@@ -158,5 +162,4 @@ console.log(`Тренд 24h: ${sma24h.toFixed(1)} (${trend24h})`);
 //${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот: 
 ${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
-console.log(`Разворот2:
-${oversoldPrice.toFixed(2)} ${overboughtPrice.toFixed(2)}`)
+ 
