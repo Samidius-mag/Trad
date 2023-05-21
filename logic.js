@@ -104,10 +104,16 @@ const rsi1h = rsi
 //const rsi12h = calculateRSI(pricesClose, 56);
 //const rsi24h = calculateRSI(pricesClose, 230);
 
+
+
 const overbought1h = rsi1h > 70;
 const overdohuyabought1h = rsi1h > 75;
 const oversold1h = rsi1h < 30;
 const overdohuyasold1h = rsi1h < 25;
+
+const overboughtPrice = currentPrice - ((currentPrice - closePrices[closePrices.length - 2]) * (overbought1h / 100));
+const oversoldPrice = currentPrice + ((closePrices[closePrices.length - 2] - currentPrice) * (oversold1h / 100));
+
 //const overbought4h = rsi4h > 70;
 //const oversold4h = rsi4h < 30;
 //const overbought12h = rsi12h > 70;
@@ -152,4 +158,5 @@ console.log(`Тренд 24h: ${sma24h.toFixed(1)} (${trend24h})`);
 //${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот: 
 ${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
-
+console.log(`Разворот2:
+${overboughtPrice.toFixed(2)} (${overboughtPrice.toFixed(2)})`)
