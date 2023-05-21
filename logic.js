@@ -111,8 +111,8 @@ const overdohuyabought1h = rsi1h > 75;
 const oversold1h = rsi1h < 30;
 const overdohuyasold1h = rsi1h < 25;
 
-const overboughtPrice = currentPrice - ((currentPrice - closePrices[closePrices.length - 2]) * (70 / 100));
-const oversoldPrice = currentPrice + ((closePrices[closePrices.length - 2] - currentPrice) * (30 / 100));
+const overboughtPrice = currentPrice - ((currentPrice - closePrices[closePrices.length - 2]) * rsi);
+const oversoldPrice = currentPrice + ((closePrices[closePrices.length - 2] - currentPrice) * rsi);
 
 //const overbought4h = rsi4h > 70;
 //const oversold4h = rsi4h < 30;
