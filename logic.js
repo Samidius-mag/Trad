@@ -42,7 +42,7 @@ const gainLosses = closePrices.map((price, i) => {
 
 let avgGain = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + val, 0) / RSI_PERIOD;
 let avgLoss = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + (val === 0 ? 0 : Math.abs(val - avgGain)), 0) / RSI_PERIOD;
-const rs = avgGain / avgLoss;
+let rs = avgGain / avgLoss;
 let rsi = 100 - (100 / (1 + rs));
 
 for (let i = RSI_PERIOD; i < closePrices.length; i++) {
