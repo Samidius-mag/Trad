@@ -159,4 +159,4 @@ console.log(`Тренд 24h: ${sma24h.toFixed(1)} (${trend24h})`);
 console.log(`Разворот: 
 ${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
 console.log(`Разворот2:
-${overboughtPrice.toFixed(2)} (${overboughtPrice.toFixed(2)})`)
+${oversoldPrice.toFixed(2)} ${overboughtPrice.toFixed(2)}`)
