@@ -29,8 +29,6 @@ function calculateFibonacciLevels(prices, period) {
   return levels;
 }
 const RSI_PERIOD = 14;
-
-
 const closePrices = prices.map(price => price.close);
 const gainLosses = closePrices.map((price, i) => {
   if (i === 0) {
@@ -39,12 +37,10 @@ const gainLosses = closePrices.map((price, i) => {
   const diff = price - closePrices[i - 1];
   return diff > 0 ? diff : 0;
 });
-
 let avgGain = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + val, 0) / RSI_PERIOD;
 let avgLoss = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + (val === 0 ? 0 : Math.abs(val - avgGain)), 0) / RSI_PERIOD;
 let rs = avgGain / avgLoss;
 let rsi = 100 - (100 / (1 + rs));
-
 for (let i = RSI_PERIOD; i < closePrices.length; i++) {
   const gain = gainLosses[i];
   const loss = gain === 0 ? 0 : Math.abs(gain - avgGain);
@@ -53,8 +49,6 @@ for (let i = RSI_PERIOD; i < closePrices.length; i++) {
   rs = avgGain / avgLoss;
   rsi = ((100 - (100 / (1 + rs))) + (rsi * (RSI_PERIOD - 1))) / RSI_PERIOD;
 }
-
-
 //function calculateRSI(prices, period) {
   //const changes = prices.slice(1).map((price, i) => price - prices[i]);
   //const gains = changes.map(change => change > 0 ? change : 3);
@@ -110,8 +104,10 @@ const rsi1h = rsi
 //const rsi12h = calculateRSI(pricesClose, 56);
 //const rsi24h = calculateRSI(pricesClose, 230);
 
-const overbought1h = rsi1h > 78;
+const overbought1h = rsi1h > 70;
+const overdohuyabought1h = rsi1h > 75;
 const oversold1h = rsi1h < 30;
+const overdohuyasold1h = rsi1h < 25;
 //const overbought4h = rsi4h > 70;
 //const oversold4h = rsi4h < 30;
 //const overbought12h = rsi12h > 70;
@@ -138,7 +134,7 @@ console.log(`Рекомендация: ${recommendation}`);
 //console.log(EMA233: ${ema233.toFixed(2)});
 console.log(`Тренд 1h: ${sma1h.toFixed(2)} (${trend1h})`);
 console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
-(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : 'Нейтрально'})`);
+(${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : overdohuyasold1h ? 'Ахуеть как Перепродано' : overbought1h ? 'Ахуеть как Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 4h: ${sma4h.toFixed(2)} (${trend4h})`);
 //console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
 //(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
