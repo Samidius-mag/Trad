@@ -18,7 +18,8 @@ const bb = ta.BBANDS(prices.map(price => price.close), bbPeriod);
 // Логика для построения Дисперсии вокруг MA (sigma) = 0.01
 const sigma = 0.01;
 const ma = ta.SMA(prices.map(price => price.close), bbPeriod);
-const stdev = ta.STDDEV(prices.map(price => price.close), bbPeriod);
+const stdev = ta.STDDEVMA(prices.map(price => price.close), bbPeriod);
+
 const dev = bb.outRealUpperBand.map((upper, i) => upper - bb.outRealLowerBand[i]);
 const forMult = 2;
 const sigmaDev = dev.map(d => d * sigma);
