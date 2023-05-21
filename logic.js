@@ -40,8 +40,8 @@ const gainLosses = closePrices.map((price, i) => {
   return diff > 0 ? diff : 0;
 });
 
-const avgGain = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + val, 0) / RSI_PERIOD;
-const avgLoss = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + (val === 0 ? 0 : Math.abs(val - avgGain)), 0) / RSI_PERIOD;
+let avgGain = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + val, 0) / RSI_PERIOD;
+let avgLoss = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + (val === 0 ? 0 : Math.abs(val - avgGain)), 0) / RSI_PERIOD;
 const rs = avgGain / avgLoss;
 let rsi = 100 - (100 / (1 + rs));
 
