@@ -168,7 +168,7 @@ console.log(`Рекомендация: ${recommendation}`);
 console.log(`CТОП:${rsi1h} из 70.0 ${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'}`);
 console.log(`СТОП 🔽: ${oversoldPrice.toFixed(2)}`);
 console.log(`СТОП 🔼: ${overboughtPrice.toFixed(2)}`);
-console.log(`Сигма: ${sigmaDev.toFixed(1)}`);
+console.log(`Сигма: ${sigmaDev}`);
 //console.log(EMA21: ${ema21.toFixed(2)});
 //console.log(EMA55: ${ema55.toFixed(2)});
 //console.log(EMA89: ${ema89.toFixed(2)});
