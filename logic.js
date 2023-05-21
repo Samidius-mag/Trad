@@ -156,9 +156,9 @@ const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.le
 //const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
-if (rsi1h !== overbought1h && rsi1h > buySignal && currentPrice < prevPriceMax /*&& currentPrice < upper[upper.length - 1]*/) { //верхний порог продажа
+if (rsi1h <= overbought1h && rsi1h > buySignal && currentPrice < prevPriceMax /*&& currentPrice < upper[upper.length - 1]*/) { //верхний порог продажа
 recommendation = 'продажа 📤';
-} else if (rsi1h !== oversold1h && rsi1h <= sellSignal && currentPrice > prevPriceMin /*&& currentPrice > lower[lower.length - 1]*/) { //нижний порог покупка
+} else if (rsi1h >= oversold1h && rsi1h <= sellSignal && currentPrice > prevPriceMin /*&& currentPrice > lower[lower.length - 1]*/) { //нижний порог покупка
 recommendation = 'покупка 📥';
 } else if (rsi1h < sellSignal /*&& currentPrice > lower[lower.length - 1]*/ && currentPrice < prevPriceMin && rsi1h !== oversold1h) { //нижний порог продажа 
 recommendation = 'продажа 📤';
@@ -180,12 +180,12 @@ console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
 console.log(`CТОП:${rsi1h} из 70.0 ${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'}`);
-console.log(`СТОП 🔽: ${oversoldPrice.toFixed(2)}`);
-console.log(`СТОП 🔼: ${overboughtPrice.toFixed(2)}`);
-console.log('Upper band:', upper[upper.length - 1]);
-console.log('Lower band:', lower[lower.length - 1]);
-console.log(`Buy: ${buySignal}`);
-console.log(`Sell: ${sellSignal}`);
+//console.log(`СТОП 🔽: ${oversoldPrice.toFixed(2)}`);
+//console.log(`СТОП 🔼: ${overboughtPrice.toFixed(2)}`);
+//console.log('Upper band:', upper[upper.length - 1]);
+//console.log('Lower band:', lower[lower.length - 1]);
+//console.log(`Buy: ${buySignal}`);
+//console.log(`Sell: ${sellSignal}`);
 //console.log(EMA89: ${ema89.toFixed(2)});
 //console.log(EMA144: ${ema144.toFixed(2)});
 //console.log(EMA233: ${ema233.toFixed(2)});
