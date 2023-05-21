@@ -114,6 +114,7 @@ const fib89 = calculateFibonacciLevels(prices, 89);
 const fib144 = calculateFibonacciLevels(prices, 144);
 const fib233 = calculateFibonacciLevels(prices, 233);
 */
+/*
 const fib13 = calculateFibonacciLevels(prices, 13);
 const pivotPoints = [
   { level: fib13[11], type: 'под' },
@@ -129,7 +130,7 @@ const reversalPoints = [
   { level: fib13[12], type: '🔼' },
   { level: fib13[0], type: '🔽' },
 ];
-
+*/
 const rsi1h = rsi
 //const rsi4h = calculateRSI(pricesClose, 14);
 //const rsi12h = calculateRSI(pricesClose, 56);
