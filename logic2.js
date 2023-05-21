@@ -24,7 +24,7 @@ const macdCurrentValues = macdValues.map(macd => macd[macd.length - 1]);
 const macdSignalValues = macdValues.map(macd => macd[macd.length - 1].signal);
 
 // Рассчитываем EMA (Exponential Moving Average) с периодом 50
-const emaPeriod = 50;
+const emaPeriod = 55;
 const emaValues = EMA.calculate({ period: emaPeriod, values: price.map(p => Number(p.close)) });
 const emaCurrentValue = emaValues[emaValues.length - 1];
 
@@ -39,7 +39,7 @@ for (let i = 0; i < smaPeriods.length; i++) {
   const signalValue = macdSignalValues[i];
   const prediction12h = lastPrice * (1 + ((sma - lastPrice) / lastPrice) + ((rsi - 50) / 100 * 2) + ((macdValue - signalValue) / lastPrice * 2));
   predictions.push(prediction12h);
-  const trend12h = prediction12h > emaCurrentValue ? 'Вверх' : 'Вниз';
+  const trend12h = prediction12h > emaCurrentValue ? '🔼' : '🔽';
   trends.push(trend12h);
 }
 for (let i = 0; i < smaPeriods.length; i++) {
@@ -49,7 +49,7 @@ for (let i = 0; i < smaPeriods.length; i++) {
   const signalValue = macdValues[i][macdValues[i].length - 4].signal;
   const prediction4h = price[price.length - 4].close * (1 + ((sma - price[price.length - 4].close) / price[price.length - 4].close) + ((rsi - 50) / 100) + ((macdValue - signalValue) / price[price.length - 4].close));
   predictions.push(prediction4h);
-  const trend4h = prediction4h > emaCurrentValue ? 'Вверх' : 'Вниз';
+  const trend4h = prediction4h > emaCurrentValue ? '🔼' : '🔽';
   trends.push(trend4h);
 }
 for (let i = 0; i < smaPeriods.length; i++) {
@@ -59,19 +59,19 @@ for (let i = 0; i < smaPeriods.length; i++) {
   const signalValue = macdValues[i][macdValues[i].length - 1].signal;
   const prediction1h = price[price.length - 1].close * (1 + ((sma - price[price.length - 1].close) / price[price.length - 1].close) + ((rsi - 50) / 100) + ((macdValue - signalValue) / price[price.length - 1].close));
   predictions.push(prediction1h);
-  const trend1h = prediction1h > emaCurrentValue ? 'Вверх' : 'Вниз';
+  const trend1h = prediction1h > emaCurrentValue ? '🔼' : '🔽';
   trends.push(trend1h);
 }
 
 console.log(`Прогноз 1H:
-${predictions.slice(smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
+${predictions.slice(smaPeriods.length * 2).map(p => p.toFixed(1)).join(', ')}`);
 console.log(`Тренд 1H:
 ${trends.slice(smaPeriods.length * 2).join(', ')}`);
 console.log(`Прогноз 4H:
-${predictions.slice(smaPeriods.length, smaPeriods.length * 2).map(p => p.toFixed(2)).join(', ')}`);
+${predictions.slice(smaPeriods.length, smaPeriods.length * 2).map(p => p.toFixed(1)).join(', ')}`);
 console.log(`Тренд 4H:
 ${trends.slice(smaPeriods.length, smaPeriods.length * 2).join(', ')}`);
 console.log(`Прогноз 12H:
-${predictions.slice(0, smaPeriods.length).map(p => p.toFixed(2)).join(', ')}`);
+${predictions.slice(0, smaPeriods.length).map(p => p.toFixed(1)).join(', ')}`);
 console.log(`Тренд 12H:
 ${trends.slice(0, smaPeriods.length).join(', ')}`);
