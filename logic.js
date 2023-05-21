@@ -74,10 +74,10 @@ const sma1h = calculateSMA(pricesClose, 2);
 const sma4h = calculateSMA(pricesClose, 4);
 const sma12h = calculateSMA(pricesClose, 12);
 const sma24h = calculateSMA(pricesClose, 24);
-const trend1h = currentPrice > sma1h ? 'вверх' : currentPrice < sma1h ? 'вниз' : 'боковик';
-const trend4h = currentPrice > sma4h ? 'вверх' : currentPrice < sma4h ? 'вниз' : 'боковик';
-const trend12h = currentPrice > sma12h ? 'вверх' : currentPrice < sma12h ? 'вниз' : 'боковик';
-const trend24h = currentPrice > sma24h ? 'вверх' : currentPrice < sma24h ? 'вниз' : 'боковик';
+const trend1h = currentPrice > sma1h ? 'вверх🔼' : currentPrice < sma1h ? 'вниз🔽' : 'боковик❌';
+const trend4h = currentPrice > sma4h ? 'вверх🔼' : currentPrice < sma4h ? 'вниз🔽' : 'боковик❌';
+const trend12h = currentPrice > sma12h ? 'вверх🔼' : currentPrice < sma12h ? 'вниз🔽' : 'боковик❌';
+const trend24h = currentPrice > sma24h ? 'вверх🔼' : currentPrice < sma24h ? 'вниз🔽' : 'боковик❌';
 const fib21 = calculateFibonacciLevels(prices, 21);
 const fib55 = calculateFibonacciLevels(prices, 55);
 const fib89 = calculateFibonacciLevels(prices, 89);
@@ -95,8 +95,8 @@ const pivotPoints = [
   { level: fib13[1], type: 'сопр' },
 ];
 const reversalPoints = [
-  { level: fib13[12], type: 'Вверх' },
-  { level: fib13[0], type: 'Вниз' },
+  { level: fib13[12], type: '🔼' },
+  { level: fib13[0], type: '🔽' },
 ];
 
 const rsi1h = rsi
@@ -117,17 +117,17 @@ const overdohuyasold1h = rsi1h < 25;
 let recommendation = '-';
 
 if (ema21 > ema55 && currentPrice > ema21 && currentPrice > fib13[6]) {
-  recommendation = 'покупка';
+  recommendation = 'покупка 📥';
 } else if (ema21 < ema55 && currentPrice < ema21 && currentPrice < fib13[9]) {
-  recommendation = 'продажа';
+  recommendation = 'продажа 📤';
   } else {  (currentPrice < fib13[6] && currentPrice > fib13[9]) 
-  recommendation = 'боковик';
+  recommendation = 'боковик ❌';
 }
 
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
-console.log(`CТОП: ${rsi1h.toFixed(1)} (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : overdohuyasold1h ? 'Ахуеть как Перепродано' : overbought1h ? 'Ахуеть как Перекупленно' : 'Жди'})`);
+console.log(`CТОП: ${rsi1h.toFixed(1)} (${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'})`);
 console.log(`Тренд 4h: ${sma4h.toFixed(2)} (${trend4h})`);
 //console.log(EMA21: ${ema21.toFixed(2)});
 //console.log(EMA55: ${ema55.toFixed(2)});
