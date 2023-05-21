@@ -1,4 +1,4 @@
-const ta = require('ta-lib');
+const TI = require('technicalindicators');
 const prices = require('./price.json');
 
 // Логика для определения текущей цены
@@ -9,25 +9,25 @@ const change = (currentPrice - prices[prices.length - 2].close) / prices[prices.
 
 // Логика для построения RSI с периодом 14
 const rsiPeriod = 14;
-const rsi = ta.RSI(prices.map(price => price.close), rsiPeriod);
+const rsi = TI.RSI.calculate({ period: rsiPeriod, values: prices.map(price => price.close) });
 
 // Логика для построения MA внутри BB с периодом 20
 const bbPeriod = 20;
-const bb = ta.BBANDS(prices.map(price => price.close), bbPeriod);
+const bb = TI.BollingerBands.calculate({ period: bbPeriod, stdDev: 2, values: prices.map(price => price.close) });
 
 // Логика для построения Дисперсии вокруг MA (sigma) = 0.01
 const sigma = 0.01;
-const ma = ta.SMA(prices.map(price => price.close), bbPeriod);
-const stdev = ta.STDDEVMA(prices.map(price => price.close), bbPeriod);
+const ma = TI.SMA.calculate({ period: bbPeriod, values: prices.map(price => price.close) });
+const stdev = TI.STDDEV.calculate({ period: bbPeriod, values: prices.map(price => price.close) }) * 2;
 
-const dev = bb.outRealUpperBand.map((upper, i) => upper - bb.outRealLowerBand[i]);
+const dev = bb.map(b => b.upper - b.lower);
 const forMult = 2;
 const sigmaDev = dev.map(d => d * sigma);
 const upper = ma.map((m, i) => m + sigmaDev[i]);
 const lower = ma.map((m, i) => m - sigmaDev[i]);
 
 // Сигнал на покупку
-const basis = ta.EMA(rsi, bbPeriod);
+const basis = TI.EMA.calculate({ period: bbPeriod, values: rsi });
 const buySignal = basis[basis.length - 1] + ((upper[upper.length - 1] - lower[lower.length - 1]) * sigma);
 
 // Сигнал на продажу
@@ -36,9 +36,9 @@ const sellSignal = basis[basis.length - 1] - ((upper[upper.length - 1] - lower[l
 console.log('Current price:', currentPrice);
 console.log('Price change:', change);
 console.log('RSI:', rsi[rsi.length - 1]);
-console.log('Bollinger Bands:', bb);
+console.log('Bollinger Bands:', bb[bb.length - 1]);
 console.log('MA:', ma[ma.length - 1]);
-console.log('Standard deviation:', stdev[stdev.length - 1]);
+console.log('Standard deviation:', stdev);
 console.log('Upper band:', upper[upper.length - 1]);
 console.log('Lower band:', lower[lower.length - 1]);
 console.log('Buy signal:', buySignal);
