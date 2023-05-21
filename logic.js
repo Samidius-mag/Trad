@@ -28,29 +28,33 @@ function calculateFibonacciLevels(prices, period) {
 
   return levels;
 }
+const RSI_PERIOD = 14;
 
-function calculateRSI(prices, period = 14) {
-  const deltas = [];
-  for (let i = 1; i < prices.slice; i++) {
-    deltas.push(prices[i] - prices[i - 1]);
-  }
-  const gains = deltas.filter(delta => delta > 0);
-  const losses = deltas.filter(delta => delta < 0).map(delta => Math.abs(delta));
-  if (gains.slice === 0) {
+
+const closePrices = prices.map(price => price.close);
+const gainLosses = closePrices.map((price, i) => {
+  if (i === 0) {
     return 0;
   }
-  if (losses.slice === 0) {
-    return 100;
-  }
-  if (gains.slice < period || losses.slice < period) {
-    return null;
-  }
-  const avgGain = gains.slice(0, period).reduce((acc, val) => acc + val, 0) / period;
-  const avgLoss = losses.slice(0, period).reduce((acc, val) => acc + val, 0) / period;
-  const rs = avgGain / avgLoss;
-  const rsi = 100 - (100 / (1 + rs));
-  return rsi;
+  const diff = price - closePrices[i - 1];
+  return diff > 0 ? diff : 0;
+});
+
+const avgGain = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + val, 0) / RSI_PERIOD;
+const avgLoss = gainLosses.slice(0, RSI_PERIOD).reduce((sum, val) => sum + (val === 0 ? 0 : Math.abs(val - avgGain)), 0) / RSI_PERIOD;
+const rs = avgGain / avgLoss;
+let rsi = 100 - (100 / (1 + rs));
+
+for (let i = RSI_PERIOD; i < closePrices.length; i++) {
+  const gain = gainLosses[i];
+  const loss = gain === 0 ? 0 : Math.abs(gain - avgGain);
+  avgGain = ((avgGain * (RSI_PERIOD - 1)) + gain) / RSI_PERIOD;
+  avgLoss = ((avgLoss * (RSI_PERIOD - 1)) + loss) / RSI_PERIOD;
+  rs = avgGain / avgLoss;
+  rsi = ((100 - (100 / (1 + rs))) + (rsi * (RSI_PERIOD - 1))) / RSI_PERIOD;
 }
+
+
 //function calculateRSI(prices, period) {
   //const changes = prices.slice(1).map((price, i) => price - prices[i]);
   //const gains = changes.map(change => change > 0 ? change : 3);
@@ -101,7 +105,7 @@ const reversalPoints = [
   { level: fib13[0], type: 'Вниз' },
 ];
 
-const rsi1h = calculateRSI();
+const rsi1h = rsi
 //const rsi4h = calculateRSI(pricesClose, 14);
 //const rsi12h = calculateRSI(pricesClose, 56);
 //const rsi24h = calculateRSI(pricesClose, 230);
