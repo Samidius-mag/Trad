@@ -127,7 +127,7 @@ if (ema21 > ema55 && currentPrice > ema21 && currentPrice > fib13[6]) {
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
-console.log(`Масса 1h: ${rsi1h.toFixed(2)} 
+console.log(`CТОП: ${rsi1h.toFixed(2)} 
 (${oversold1h ? 'Перепродано' : overbought1h ? 'Перекупленно' : overdohuyasold1h ? 'Ахуеть как Перепродано' : overbought1h ? 'Ахуеть как Перекупленно' : 'Нейтрально'})`);
 console.log(`Тренд 4h: ${sma4h.toFixed(2)} (${trend4h})`);
 //console.log(EMA21: ${ema21.toFixed(2)});
