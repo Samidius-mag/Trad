@@ -90,6 +90,8 @@ const currentPrice = prices[prices.length - 1].close;
 const prevPrice = prices[prices.length - 2].close;
 const priceChange = currentPrice - prevPrice;
 const priceChangePercent = (priceChange / prevPrice) * 100;
+const prevPriceMin = prices[prices.length - 2].low;
+const prevPriceMax = prices[prices.length - 2].high;
 /*
 const ema21 = calculateEMA(pricesClose, 21);
 const ema55 = calculateEMA(pricesClose, 55);
@@ -154,13 +156,13 @@ const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.le
 //const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
-if (rsi1h >= overbought1h && rsi1h <= buySignal && currentPrice > prevPrice && rsi1h < upper[upper.length - 1]) {
+if (rsi1h >= overbought1h && rsi1h > buySignal && currentPrice < prevPriceMax && currentPrice < upper[upper.length - 1]) { //верхний порог продажа
 recommendation = 'продажа 📤';
-} else if (rsi1h <= oversold1h && rsi1h >= sellSignal && currentPrice < prevPrice && rsi1h > lower[lower.length - 1]) {
+} else if (rsi1h <= oversold1h && rsi1h <= sellSignal && currentPrice > prevPriceMin && currentPrice > lower[lower.length - 1]) { //нижний порог покупка
 recommendation = 'покупка 📥';
-} else if (rsi1h < sellSignal && rsi1h > lower[lower.length - 1] && currentPrice < prevPrice && rsi1h !== oversold1h) {
+} else if (rsi1h < sellSignal && currentPrice > lower[lower.length - 1] && currentPrice < prevPriceMin && rsi1h !== oversold1h) { //нижний порог продажа 
 recommendation = 'продажа 📤';
-} else if (rsi1h > buySignal && rsi1h < upper[upper.length - 1] && currentPrice > prevPrice && rsi1h !== overbought1h) {
+} else if (rsi1h >= buySignal && currentPrice < upper[upper.length - 1] && currentPrice > prevPriceMin && rsi1h !== overbought1h) { //верхний порог покупка
 recommendation = 'покупка 📥';
 } else if (rsi1h >= sellSignal && rsi <= buySignal) {
 recommendation = 'боковик ❌';
