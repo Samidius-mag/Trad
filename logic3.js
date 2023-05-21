@@ -23,8 +23,8 @@ const ma = SMA.calculate({ period: bbPeriod, values: prices.map(price => price.c
 const dev = bb.map(b => b.upper - b.lower);
 const forMult = 2;
 const sigmaDev = dev.map(d => d * sigma);
-const upper.toFixed(2) = ma.map((m, i) => m + sigmaDev[i]);
-const lower..toFixed(2) = ma.map((m, i) => m - sigmaDev[i]);
+const upper = ma.map((m, i) => m + sigmaDev[i]).toFixed(2);
+const lower = ma.map((m, i) => m - sigmaDev[i]).toFixed(2);
 
 // Сигнал на покупку
 const basis = EMA.calculate({ period: bbPeriod, values: rsi });
