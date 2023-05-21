@@ -28,7 +28,7 @@ function calculateFibonacciLevels(prices, period) {
 
   return levels;
 }
-const RSI_PERIOD = 14;
+const RSI_PERIOD = 3;
 const closePrices = prices.map(price => price.close);
 const gainLosses = closePrices.map((price, i) => {
   if (i === 0) {
