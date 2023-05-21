@@ -158,6 +158,6 @@ console.log(`Тренд 24h: ${sma24h.toFixed(1)} (${trend24h})`);
 //console.log(Fibonacci 233: ${fib233.join(', ')});
 //console.log(`П/С: 
 //${pivotPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
-console.log(`Разворот: 
-${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
+//console.log(`Разворот: 
+//${reversalPoints.map(point => `${point.type} ${point.level}`).join(', ')}`);
  
