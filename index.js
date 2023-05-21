@@ -48,6 +48,23 @@ const sendToBot2 = () => {
   });
 };
 
+const sendToBot3 = () => {
+  const child = spawn('node', ['bot3.js']);
+
+  child.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  child.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  child.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+};
+
 setInterval(loadPrice, 5000);
 setInterval(sendToBot, 60000);
+setInterval(sendToBot2, 80000);
 setInterval(sendToBot2, 100000);
