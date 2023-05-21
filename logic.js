@@ -154,6 +154,18 @@ const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.le
 //const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
+if (rsi1h >= overbought1h && rsi1h <= buySignal && currentPrice > prevPrice && rsi1h < upper[upper.length - 1]) {
+recommendation = 'продажа 📤';
+} else if (rsi1h <= oversold1h && rsi1h >= sellSignal && currentPrice < prevPrice && rsi1h > lower[lower.length - 1]) {
+recommendation = 'покупка 📥';
+} else if (rsi1h < sellSignal && rsi1h > lower[lower.length - 1] && currentPrice < prevPrice && rsi1h !== oversold1h) {
+recommendation = 'продажа 📤';
+} else if (rsi1h > buySignal && rsi1h < upper[upper.length - 1] && currentPrice > prevPrice && rsi1h !== overbought1h) {
+recommendation = 'покупка 📥';
+} else if (rsi1h >= sellSignal && rsi <= buySignal) {
+recommendation = 'боковик ❌';
+}
+/*
 if (buySignal >= rsi1h) {
   recommendation = 'покупка 📥';
 } else if (sellSignal <= rsi1h) {
@@ -161,7 +173,7 @@ if (buySignal >= rsi1h) {
   } else {  (buySignal < rsi && sellSignal > rsi1h) 
   recommendation = 'боковик ❌';
 }
-
+*/
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
