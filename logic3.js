@@ -23,8 +23,8 @@ const ma = SMA.calculate({ period: bbPeriod, values: prices.map(price => price.c
 const dev = bb.map(b => b.upper - b.lower);
 const forMult = 2;
 const sigmaDev = dev.map(d => d * sigma);
-const upper = ma.map((m, i) => m + sigmaDev[i]);
-const lower = ma.map((m, i) => m - sigmaDev[i]);
+const upper.toFixed(2) = ma.map((m, i) => m + sigmaDev[i]);
+const lower..toFixed(2) = ma.map((m, i) => m - sigmaDev[i]);
 
 // Сигнал на покупку
 const basis = EMA.calculate({ period: bbPeriod, values: rsi });
@@ -34,11 +34,9 @@ const buySignal = basis[basis.length - 1] + ((upper[upper.length - 1] - lower[lo
 const sellSignal = basis[basis.length - 1] - ((upper[upper.length - 1] - lower[lower.length - 1]) * sigma);
 
 console.log('Current price:', currentPrice);
-console.log('Price change:', change);
 console.log('RSI:', rsi[rsi.length - 1]);
 console.log('Bollinger Bands:', bb[bb.length - 1]);
-console.log('MA:', ma[ma.length - 1]);
 console.log('Upper band:', upper[upper.length - 1]);
 console.log('Lower band:', lower[lower.length - 1]);
-console.log('Buy signal:', buySignal);
-console.log('Sell signal:', sellSignal);
+console.log('Buy signal:', buySignal.toFixed(2));
+console.log('Sell signal:', sellSignal.toFixed(2));
