@@ -156,9 +156,9 @@ const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.le
 //const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
-if (rsi1h >= overbought1h && rsi1h > buySignal && currentPrice < prevPriceMax /*&& currentPrice < upper[upper.length - 1]*/) { //верхний порог продажа
+if (rsi1h !== overbought1h && rsi1h > buySignal && currentPrice < prevPriceMax /*&& currentPrice < upper[upper.length - 1]*/) { //верхний порог продажа
 recommendation = 'продажа 📤';
-} else if (rsi1h <= oversold1h && rsi1h <= sellSignal && currentPrice > prevPriceMin /*&& currentPrice > lower[lower.length - 1]*/) { //нижний порог покупка
+} else if (rsi1h !== oversold1h && rsi1h <= sellSignal && currentPrice > prevPriceMin /*&& currentPrice > lower[lower.length - 1]*/) { //нижний порог покупка
 recommendation = 'покупка 📥';
 } else if (rsi1h < sellSignal /*&& currentPrice > lower[lower.length - 1]*/ && currentPrice < prevPriceMin && rsi1h !== oversold1h) { //нижний порог продажа 
 recommendation = 'продажа 📤';
