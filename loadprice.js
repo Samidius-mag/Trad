@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 
-const url = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=5m&limit=1000';
+const url = 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=1000';
 
 axios.get(url)
   .then(response => {
