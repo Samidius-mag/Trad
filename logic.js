@@ -45,7 +45,7 @@ const forMult = 2;
 const sigmaDev = dev.map(d => d * sigma);
 const upper = ma.map((m, i) => m + sigmaDev[i]);
 const lower = ma.map((m, i) => m - sigmaDev[i]);
-
+const closePrices = prices.map(price => price.close);
 // Сигнал на покупку
 const basis = EMA.calculate({ period: bbPeriod, values: rsi });
 const buySignal = basis[basis.length - 1] + ((upper[upper.length - 1] - lower[lower.length - 1]) * sigma);
