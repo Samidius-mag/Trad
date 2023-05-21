@@ -74,10 +74,10 @@ const sma1h = calculateSMA(pricesClose, 2);
 const sma4h = calculateSMA(pricesClose, 4);
 const sma12h = calculateSMA(pricesClose, 12);
 const sma24h = calculateSMA(pricesClose, 24);
-const trend1h = currentPrice > sma1h ? 'вверх🔼' : currentPrice < sma1h ? 'вниз🔽' : 'боковик❌';
-const trend4h = currentPrice > sma4h ? 'вверх🔼' : currentPrice < sma4h ? 'вниз🔽' : 'боковик❌';
-const trend12h = currentPrice > sma12h ? 'вверх🔼' : currentPrice < sma12h ? 'вниз🔽' : 'боковик❌';
-const trend24h = currentPrice > sma24h ? 'вверх🔼' : currentPrice < sma24h ? 'вниз🔽' : 'боковик❌';
+const trend1h = currentPrice > sma1h ? '🔼' : currentPrice < sma1h ? '🔽' : 'боковик❌';
+const trend4h = currentPrice > sma4h ? '🔼' : currentPrice < sma4h ? '🔽' : 'боковик❌';
+const trend12h = currentPrice > sma12h ? '🔼' : currentPrice < sma12h ? '🔽' : 'боковик❌';
+const trend24h = currentPrice > sma24h ? '🔼' : currentPrice < sma24h ? '🔽' : 'боковик❌';
 const fib21 = calculateFibonacciLevels(prices, 21);
 const fib55 = calculateFibonacciLevels(prices, 55);
 const fib89 = calculateFibonacciLevels(prices, 89);
@@ -128,19 +128,19 @@ console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
 console.log(`CТОП: ${rsi1h.toFixed(1)} (${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'})`);
-console.log(`Тренд 4h: ${sma4h.toFixed(2)} (${trend4h})`);
+console.log(`Тренд 4h: ${sma4h.toFixed(1)} (${trend4h})`);
 //console.log(EMA21: ${ema21.toFixed(2)});
 //console.log(EMA55: ${ema55.toFixed(2)});
 //console.log(EMA89: ${ema89.toFixed(2)});
 //console.log(EMA144: ${ema144.toFixed(2)});
 //console.log(EMA233: ${ema233.toFixed(2)});
-console.log(`Тренд 1h: ${sma1h.toFixed(2)} (${trend1h})`);
+console.log(`Тренд 1h: ${sma1h.toFixed(1)} (${trend1h})`);
 //console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
 //(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Тренд 12h: ${sma12h.toFixed(2)} (${trend12h})`);
+console.log(`Тренд 12h: ${sma12h.toFixed(1)} (${trend12h})`);
 //console.log(`Масса 12h: ${rsi12h.toFixed(2)} 
 //(${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Тренд 24h: ${sma24h.toFixed(2)} (${trend24h})`);
+console.log(`Тренд 24h: ${sma24h.toFixed(1)} (${trend24h})`);
 //console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
 //(${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
 //console.log(Fibonacci 21: ${fib21.join(', ')});
