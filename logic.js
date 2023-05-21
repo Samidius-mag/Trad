@@ -131,20 +131,20 @@ const reversalPoints = [
   { level: fib13[0], type: '🔽' },
 ];
 */
-const rsi1h = rsi
+//const rsi1h = rsi
 //const rsi4h = calculateRSI(pricesClose, 14);
 //const rsi12h = calculateRSI(pricesClose, 56);
 //const rsi24h = calculateRSI(pricesClose, 230);
 
 
 
-const overbought1h = rsi1h > 70;
-const overdohuyabought1h = rsi1h > 75;
-const oversold1h = rsi1h < 30;
-const overdohuyasold1h = rsi1h < 25;
+const overbought1h = rsi > 70;
+const overdohuyabought1h = rsi > 75;
+const oversold1h = rsi < 30;
+const overdohuyasold1h = rsi < 25;
 
-const overboughtPrice = currentPrice - ((currentPrice - closePrices[closePrices.length - 2]) * rsi1h);
-const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.length - 2] ) * rsi1h);
+const overboughtPrice = currentPrice - ((currentPrice - closePrices[closePrices.length - 2]) * rsi);
+const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.length - 2] ) * rsi);
 
 //const overbought4h = rsi4h > 70;
 //const oversold4h = rsi4h < 30;
@@ -165,7 +165,7 @@ if (buySignal >= rsi) {
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
-console.log(`CТОП: ${rsi1h.toFixed(1)} (${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'})`);
+console.log(`CТОП: ${rsi.toFixed(1)} (${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'})`);
 console.log(`СТОП 🔽: ${oversoldPrice.toFixed(2)})`);
 console.log(`СТОП 🔼: ${overboughtPrice.toFixed(2)}`);
 //console.log(`Тренд 4h: ${sma4h.toFixed(1)} (${trend4h})`);
