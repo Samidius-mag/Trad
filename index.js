@@ -47,7 +47,7 @@ const sendToBot2 = () => {
     console.log(`child process exited with code ${code}`);
   });
 };
-
+/*
 const sendToBot3 = () => {
   const child = spawn('node', ['bot3.js']);
 
@@ -63,8 +63,8 @@ const sendToBot3 = () => {
     console.log(`child process exited with code ${code}`);
   });
 };
-
+*/
 setInterval(loadPrice, 5000);
 setInterval(sendToBot, 50000);
 setInterval(sendToBot2, 53000);
-setInterval(sendToBot3, 56000);
+//setInterval(sendToBot3, 56000);
