@@ -35,8 +35,8 @@ const sellSignal = basis[basis.length - 1] - ((upper[upper.length - 1] - lower[l
 
 console.log('Current price:', currentPrice.toFixed(2));
 console.log('RSI:', rsi[rsi.length - 1].toFixed(2));
-console.log('Bollinger Bands:', bb.toFixed(2)[bb.length - 1]);
-console.log('Upper band:', upper[upper.length - 1].toFixed(2));
-console.log('Lower band:', lower[lower.length - 1].toFixed(2));
+console.log('Bollinger Bands:', bb[bb.length - 1]);
+console.log('Upper band:', upper[upper.length - 1]);
+console.log('Lower band:', lower[lower.length - 1]);
 console.log('Buy signal:', buySignal.toFixed(2));
 console.log('Sell signal:', sellSignal.toFixed(2));
