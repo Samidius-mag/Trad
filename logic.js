@@ -1,5 +1,6 @@
 const prices = require('./price.json');
-
+const { SMA, RSI, BollingerBands, EMA } = require('technicalindicators');
+/*
 function calculateEMA(prices, period) {
   const k = 2 / (period + 1);
   let ema = prices.slice(0, period).reduce((sum, price) => sum + price, 0) / period;
@@ -28,7 +29,30 @@ function calculateFibonacciLevels(prices, period) {
 
   return levels;
 }
-const RSI_PERIOD = 14;
+*/
+// Логика для построения RSI с периодом 14
+const rsiPeriod = 14;
+const rsi = RSI.calculate({ period: rsiPeriod, values: prices.map(price => price.close) });
+// Логика для построения MA внутри BB с периодом 20
+const bbPeriod = 20;
+const bb = BollingerBands.calculate({ period: bbPeriod, stdDev: 2, values: prices.map(price => price.close) });
+
+// Логика для построения Дисперсии вокруг MA (sigma) = 0.01
+const sigma = 0.01;
+const ma = SMA.calculate({ period: bbPeriod, values: prices.map(price => price.close) });
+const dev = bb.map(b => b.upper - b.lower);
+const forMult = 2;
+const sigmaDev = dev.map(d => d * sigma);
+const upper = ma.map((m, i) => m + sigmaDev[i]);
+const lower = ma.map((m, i) => m - sigmaDev[i]);
+
+// Сигнал на покупку
+const basis = EMA.calculate({ period: bbPeriod, values: rsi });
+const buySignal = basis[basis.length - 1] + ((upper[upper.length - 1] - lower[lower.length - 1]) * sigma);
+// Сигнал на продажу
+const sellSignal = basis[basis.length - 1] - ((upper[upper.length - 1] - lower[lower.length - 1]) * sigma);
+
+/*const RSI_PERIOD = 14;
 const closePrices = prices.map(price => price.close);
 const gainLosses = closePrices.map((price, i) => {
   if (i === 0) {
@@ -49,6 +73,7 @@ for (let i = RSI_PERIOD; i < closePrices.length; i++) {
   rs = avgGain / avgLoss;
   rsi = ((100 - (100 / (1 + rs))) + (rsi * (RSI_PERIOD - 1))) / RSI_PERIOD;
 }
+*/
 //function calculateRSI(prices, period) {
   //const changes = prices.slice(1).map((price, i) => price - prices[i]);
   //const gains = changes.map(change => change > 0 ? change : 3);
@@ -65,11 +90,14 @@ const currentPrice = prices[prices.length - 1].close;
 const prevPrice = prices[prices.length - 2].close;
 const priceChange = currentPrice - prevPrice;
 const priceChangePercent = (priceChange / prevPrice) * 100;
+/*
 const ema21 = calculateEMA(pricesClose, 21);
 const ema55 = calculateEMA(pricesClose, 55);
 const ema89 = calculateEMA(pricesClose, 89);
 const ema144 = calculateEMA(pricesClose, 144);
 const ema233 = calculateEMA(pricesClose, 233);
+*/
+/*
 const sma1h = calculateSMA(pricesClose, 2);
 const sma4h = calculateSMA(pricesClose, 4);
 const sma12h = calculateSMA(pricesClose, 12);
@@ -78,11 +106,14 @@ const trend1h = currentPrice > sma1h ? '🔼' : currentPrice < sma1h ? '🔽' : 
 const trend4h = currentPrice > sma4h ? '🔼' : currentPrice < sma4h ? '🔽' : 'боковик❌';
 const trend12h = currentPrice > sma12h ? '🔼' : currentPrice < sma12h ? '🔽' : 'боковик❌';
 const trend24h = currentPrice > sma24h ? '🔼' : currentPrice < sma24h ? '🔽' : 'боковик❌';
+*/
+/*
 const fib21 = calculateFibonacciLevels(prices, 21);
 const fib55 = calculateFibonacciLevels(prices, 55);
 const fib89 = calculateFibonacciLevels(prices, 89);
 const fib144 = calculateFibonacciLevels(prices, 144);
 const fib233 = calculateFibonacciLevels(prices, 233);
+*/
 const fib13 = calculateFibonacciLevels(prices, 13);
 const pivotPoints = [
   { level: fib13[11], type: 'под' },
@@ -122,11 +153,11 @@ const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.le
 //const oversold24h = rsi24h < 30;
 let recommendation = '-';
 
-if (ema21 > ema55 && currentPrice > ema21 && currentPrice > fib13[6]) {
+if (buySignal >= rsi) {
   recommendation = 'покупка 📥';
-} else if (ema21 < ema55 && currentPrice < ema21 && currentPrice < fib13[9]) {
+} else if (sellSignal <= rsi) {
   recommendation = 'продажа 📤';
-  } else {  (currentPrice < fib13[6] && currentPrice > fib13[9]) 
+  } else {  (buySignal < rsi && sellSignal > rsi) 
   recommendation = 'боковик ❌';
 }
 
@@ -136,19 +167,19 @@ console.log(`Рекомендация: ${recommendation}`);
 console.log(`CТОП: ${rsi1h.toFixed(1)} (${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'})`);
 console.log(`СТОП 🔽: ${oversoldPrice.toFixed(2)})`);
 console.log(`СТОП 🔼: ${overboughtPrice.toFixed(2)}`);
-console.log(`Тренд 4h: ${sma4h.toFixed(1)} (${trend4h})`);
+//console.log(`Тренд 4h: ${sma4h.toFixed(1)} (${trend4h})`);
 //console.log(EMA21: ${ema21.toFixed(2)});
 //console.log(EMA55: ${ema55.toFixed(2)});
 //console.log(EMA89: ${ema89.toFixed(2)});
 //console.log(EMA144: ${ema144.toFixed(2)});
 //console.log(EMA233: ${ema233.toFixed(2)});
-console.log(`Тренд 1h: ${sma1h.toFixed(1)} (${trend1h})`);
+//console.log(`Тренд 1h: ${sma1h.toFixed(1)} (${trend1h})`);
 //console.log(`Масса 4h: ${rsi4h.toFixed(2)} 
 //(${oversold4h ? 'Перепродано' : overbought4h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Тренд 12h: ${sma12h.toFixed(1)} (${trend12h})`);
+//console.log(`Тренд 12h: ${sma12h.toFixed(1)} (${trend12h})`);
 //console.log(`Масса 12h: ${rsi12h.toFixed(2)} 
 //(${oversold12h ? 'Перепродано' : overbought12h ? 'Перекупленно' : 'Нейтрально'})`);
-console.log(`Тренд 24h: ${sma24h.toFixed(1)} (${trend24h})`);
+//console.log(`Тренд 24h: ${sma24h.toFixed(1)} (${trend24h})`);
 //console.log(`Масса 24h: ${rsi24h.toFixed(2)} 
 //(${oversold24h ? 'Перепродано' : overbought24h ? 'Перекупленно' : 'Нейтрально'})`);
 //console.log(Fibonacci 21: ${fib21.join(', ')});
