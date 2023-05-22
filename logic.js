@@ -183,8 +183,8 @@ if (buySignal >= rsi1h) {
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
-console.log(`Индекс от 30.0 до 70.0 
-           > ${rsi1h} <
+console.log(`> Индекс от 30.0 до 70.0 <
+               > ${rsi1h} <
  ${oversold1h ? 'Перепродано 😬 ПОКУПАЙ!' : overbought1h ? 'Перекупленно 😬 ПРОДАВАЙ!' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵 ЗОНА АКТИВНОЙ ПОКУПКИ!' : overbought1h ? 'Ахуеть как Перекупленно 😵 ЗОНА АКТИВНОЙ ПРОДАЖИ!' : 'Жди🚬'}`);
 //console.log(`СТОП 🔽: ${oversoldPrice.toFixed(2)}`);
 //console.log(`СТОП 🔼: ${overboughtPrice.toFixed(2)}`);
