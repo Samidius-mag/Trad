@@ -11,11 +11,12 @@ function calculateDeviation(period) {
 }
 
 // расчет процентного отклонения для периодов 1 час, 4 часа, 12 часов и 24 часов
-const deviation1h = calculateDeviation(21 * 1);
-const deviation4h = calculateDeviation(55 * 1);
-const deviation12h = calculateDeviation(89 * 1);
-const deviation24h = calculateDeviation(144 * 1);
-
+const deviation1h = calculateDeviation(1);
+const deviation4h = calculateDeviation(4 * 1);
+const deviation12h = calculateDeviation(12 * 1);
+const deviation24h = calculateDeviation(24 * 1);
+const deviation7d = calculateDeviation(168 * 1);
+const deviation30d = calculateDeviation(720 * 1);
 /*
 console.log(`1h deviation: ${deviation1h}%`);
 console.log(`4h deviation: ${deviation4h}%`);
@@ -32,10 +33,12 @@ function calculateLevels(period, deviation) {
 }
 
 // расчет уровней поддержки и сопротивления для периодов 1 час, 4 часа, 12 часов и 24 часов
-const levels1h = calculateLevels(20 * 1, deviation1h);
-const levels4h = calculateLevels(55 * 1, deviation4h);
-const levels12h = calculateLevels(89 * 1, deviation12h);
-const levels24h = calculateLevels(144 * 1, deviation24h);
+const levels1h = calculateLevels(1, deviation1h);
+const levels4h = calculateLevels(4 * 1, deviation4h);
+const levels12h = calculateLevels(12 * 1, deviation12h);
+const levels24h = calculateLevels(24 * 1, deviation24h);
+const levels7d = calculateLevels(168 * 1, deviation24h);
+const levels30d = calculateLevels(720 * 1, deviation24h);
 
 console.log(`1 уровень: 
 Поддержка ${levels1h.support.toFixed(2)}, 
@@ -49,3 +52,9 @@ console.log(`3 уровень:
 console.log(`4 уровень: 
 Поддержка ${levels24h.support.toFixed(2)}, 
 Сопротивление: ${levels24h.resistance.toFixed(2)}`);
+console.log(`5 уровень: 
+Поддержка ${levels7d.support.toFixed(2)}, 
+Сопротивление: ${levels7d.resistance.toFixed(2)}`);
+console.log(`6 уровень: 
+Поддержка ${levels30d.support.toFixed(2)}, 
+Сопротивление: ${levels30d.resistance.toFixed(2)}`);
