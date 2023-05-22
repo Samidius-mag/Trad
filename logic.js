@@ -158,7 +158,7 @@ let recommendation = '-';
 
 if (rsi1h < overbought1h && rsi1h < overdohuyabought1h && rsi1h > buySignal && currentPrice < prevPriceMax) { //верхний порог продажа
 recommendation = 'продажа 📤';
-} else if (rsi1h == overbought1h || rsih1 == overdohuyabought1h) { //край верха
+} else if (rsi1h == overbought1h || rsi1h == overdohuyabought1h) { //край верха
 recommendation = 'продажа 📤';
 } else if (rsi1h < sellSignal && currentPrice < prevPriceMin && rsi1h > oversold1h && rsi1h > overdohuyasold1h ) { //нижний порог продажа 
 recommendation = 'продажа 📤';
