@@ -160,9 +160,13 @@ if (rsi1h !== overbought1h && rsi1h !== overdohuyabought1h && rsi1h > buySignal 
 recommendation = 'продажа 📤';
 } else if (rsi1h > oversold1h && rsi1h <= sellSignal && currentPrice > prevPriceMin /*&& currentPrice > lower[lower.length - 1]*/) { //нижний порог покупка
 recommendation = 'покупка 📥';
+} else if (rsi1h == overbought1h && rsih1 == overdohuyabought1h) { //край верха
+recommendation = 'продажа 📤';
+} else if (rsi1h == overdohuyasold1h && rsi1h == oversold1h ) { //край низа
+recommendation = 'покупка 📥';
 } else if (rsi1h < sellSignal /*&& currentPrice > lower[lower.length - 1]*/ && currentPrice < prevPriceMin && rsi1h !== oversold1h && rsi1h !== overdohuyasold1h ) { //нижний порог продажа 
 recommendation = 'продажа 📤';
-} else if (rsi1h >= buySignal /*&& currentPrice < upper[upper.length - 1]*/ && currentPrice > prevPriceMin && rsi1h !== overbought1h) { //верхний порог покупка
+} else if (rsi1h >= buySignal /*&& currentPrice < upper[upper.length - 1]*/ && currentPrice > prevPriceMin && rsi1h > overbought1h) { //верхний порог покупка
 recommendation = 'покупка 📥';
 } else if (rsi1h >= sellSignal && rsi <= buySignal) {
 recommendation = 'боковик ❌';
