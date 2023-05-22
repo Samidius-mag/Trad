@@ -194,8 +194,8 @@ console.log(`Индекс Перекуп/Перепрод
 //console.log('Lower band:', lower[lower.length - 1]);
 console.log(`Buy: ${buySignal}`);
 console.log(`Sell: ${sellSignal}`);
-console.log(`tUP: &{trandup}`);
-console.log(`tDOWN: &{tranddown}`);
+//console.log(`tUP: trandup`);
+//console.log(`tDOWN: tranddown`);
 //console.log(EMA89: ${ema89.toFixed(2)});
 //console.log(EMA144: ${ema144.toFixed(2)});
 //console.log(EMA233: ${ema233.toFixed(2)});
