@@ -143,7 +143,7 @@ const rsi1h = rsi[rsi.length - 1].toFixed(2)
 const overbought1h = rsi1h > 68;
 const overdohuyabought1h = rsi1h > 72;
 const oversold1h = rsi1h < 32;
-const overdohuyasold1h = rsi1h < 27;
+const overdohuyasold1h = rsi1h < 28;
 
 const overboughtPrice = currentPrice - ((currentPrice - closePrices[closePrices.length - 2]) * (rsi1h));
 const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.length - 2]) * (rsi1h));
