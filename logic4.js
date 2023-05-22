@@ -32,7 +32,7 @@ function calculateLevels(period, deviation) {
 }
 
 // расчет уровней поддержки и сопротивления для периодов 1 час, 4 часа, 12 часов и 24 часов
-const levels1h = calculateLevels(21 * 1, deviation1h);
+const levels1h = calculateLevels(20 * 1, deviation1h);
 const levels4h = calculateLevels(55 * 1, deviation4h);
 const levels12h = calculateLevels(89 * 1, deviation12h);
 const levels24h = calculateLevels(144 * 1, deviation24h);
