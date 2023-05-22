@@ -16,11 +16,12 @@ const deviation4h = calculateDeviation(55 * 1);
 const deviation12h = calculateDeviation(89 * 1);
 const deviation24h = calculateDeviation(144 * 1);
 
+/*
 console.log(`1h deviation: ${deviation1h}%`);
 console.log(`4h deviation: ${deviation4h}%`);
 console.log(`12h deviation: ${deviation12h}%`);
 console.log(`24h deviation: ${deviation24h}%`);
-
+*/
 // функция для расчета уровней поддержки и сопротивления
 function calculateLevels(period, deviation) {
   const prices = data.slice(-period).map(candle => parseFloat(candle.close));
@@ -36,7 +37,15 @@ const levels4h = calculateLevels(55 * 1, deviation4h);
 const levels12h = calculateLevels(89 * 1, deviation12h);
 const levels24h = calculateLevels(144 * 1, deviation24h);
 
-console.log(`1h levels: support ${levels1h.support}, resistance ${levels1h.resistance}`);
-console.log(`4h levels: support ${levels4h.support}, resistance ${levels4h.resistance}`);
-console.log(`12h levels: support ${levels12h.support}, resistance ${levels12h.resistance}`);
-console.log(`24h levels: support ${levels24h.support}, resistance ${levels24h.resistance}`);
+console.log(`1 уровень: 
+Поддержка ${levels1h.support}, 
+Сопротивление: ${levels1h.resistance}`);
+console.log(`1 уровень: 
+Поддержка ${levels4h.support}, 
+Сопротивление: ${levels4h.resistance}`);
+console.log(`1 уровень: 
+Поддержка ${levels12h.support}, 
+Сопротивление: ${levels12h.resistance}`);
+console.log(`1 уровень: 
+Поддержка ${levels24h.support}, 
+Сопротивление: ${levels24h.resistance}`);
