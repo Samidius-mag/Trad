@@ -143,7 +143,7 @@ const rsi1h = rsi[rsi.length - 1].toFixed(2)
 const overbought1h = rsi1h == 70;
 const overdohuyabought1h = rsi1h >= 71;
 const oversold1h = rsi1h == 30;
-const overdohuyasold1h = rsi1h <= 29;
+const overdohuyasold1h = rsi1h <= 28;
 
 const overboughtPrice = currentPrice - ((currentPrice - closePrices[closePrices.length - 2]) * (rsi1h));
 const oversoldPrice = currentPrice + ((currentPrice - closePrices[closePrices.length - 2]) * (rsi1h));
@@ -183,7 +183,7 @@ if (buySignal >= rsi1h) {
 console.log(`Текущая цена: ${currentPrice.toFixed(2)}`);
 console.log(`Изменение: ${priceChange.toFixed(2)} (${priceChangePercent.toFixed(2)}%)`);
 console.log(`Рекомендация: ${recommendation}`);
-console.log(`ОТ 30.0: ${rsi1h} ДО 70.0 ${oversold1h ? 'Перепродано 😬' : overbought1h ? 'Перекупленно 😬' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵' : overbought1h ? 'Ахуеть как Перекупленно 😵' : 'Жди🚬'}`);
+console.log(`ОТ 30.0: ${rsi1h} ДО 70.0 ${oversold1h ? 'Перепродано 😬 ПОКУПАЙ!' : overbought1h ? 'Перекупленно 😬 ПРОДАВАЙ!' : overdohuyasold1h ? 'Ахуеть как Перепродано 😵 ПОКУПАЙ АКТИВНЕЕ!' : overbought1h ? 'Ахуеть как Перекупленно 😵 ПРОДАВАЙ АКТИВНЕЕ!' : 'Жди🚬'}`);
 //console.log(`СТОП 🔽: ${oversoldPrice.toFixed(2)}`);
 //console.log(`СТОП 🔼: ${overboughtPrice.toFixed(2)}`);
 //console.log('Upper band:', upper[upper.length - 1]);
