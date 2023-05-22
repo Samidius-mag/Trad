@@ -38,14 +38,14 @@ const levels12h = calculateLevels(89 * 1, deviation12h);
 const levels24h = calculateLevels(144 * 1, deviation24h);
 
 console.log(`1 уровень: 
-Поддержка ${levels1h.support}, 
-Сопротивление: ${levels1h.resistance}`);
-console.log(`1 уровень: 
-Поддержка ${levels4h.support}, 
-Сопротивление: ${levels4h.resistance}`);
-console.log(`1 уровень: 
-Поддержка ${levels12h.support}, 
-Сопротивление: ${levels12h.resistance}`);
-console.log(`1 уровень: 
-Поддержка ${levels24h.support}, 
-Сопротивление: ${levels24h.resistance}`);
+Поддержка ${levels1h.support.toFixed(2)}, 
+Сопротивление: ${levels1h.resistance.toFixed(2)}`);
+console.log(`2 уровень: 
+Поддержка ${levels4h.support.toFixed(2)}, 
+Сопротивление: ${levels4h.resistance.toFixed(2)}`);
+console.log(`3 уровень: 
+Поддержка ${levels12h.support.toFixed(2)}, 
+Сопротивление: ${levels12h.resistance.toFixed(2)}`);
+console.log(`4 уровень: 
+Поддержка ${levels24h.support.toFixed(2)}, 
+Сопротивление: ${levels24h.resistance.toFixed(2)}`);
