@@ -2,16 +2,19 @@ const fs = require('fs');
 
 const data = JSON.parse(fs.readFileSync('price.json'));
 
-const close = data.map(candle => parseFloat(candle.close));
+const close = data.map(candle => {
+  const closeValue = parseFloat(candle.close);
+  return isNaN(closeValue) ? 0 : closeValue;
+});
 
 //console.log(close); // выводим значения цены закрытия в консоль
 
 //TODO: Need to change offsets so pivot is drawn ahead of last bar. The offset
 // changes depending on the current time frame being displayed.
-let fourHR_offset = 1;
-let day_offset = 2;
-let week_offset = 3;
-let month_offset = 4;
+let fourHR_offset = 0;
+let day_offset = 0;
+let week_offset = 0;
+let month_offset = 0;
 
 // функция для расчета уровней Pivot
 function calculatePivot(close, high, low, offset) {
