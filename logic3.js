@@ -14,50 +14,50 @@ fs.readFile('price.json', (err, data) => {
 
   for (let i = prices.length - 1; i >= 0; i--) {
     if (prices[i] > psar[i]) {
-      trend = 'up';
+      trend = 'восходящий';
       psarPrice = psar[i];
       if (i > 0 && prices[i - 1] < psar[i - 1]) {
-        entry = 'buy';
+        entry = 'покупку';
         trendPrice = prices[i];
-        console.log(`Buy Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
+        console.log(`Точка входа в покупку: ${trendPrice}, если цена достигнет: ${psarPrice}`);
         break;
       }
     } else if (prices[i] < psar[i]) {
-      trend = 'down';
+      trend = 'нисходящий';
       psarPrice = psar[i];
       if (i > 0 && prices[i - 1] > psar[i - 1]) {
-        entry = 'sell';
+        entry = 'продажу';
         trendPrice = prices[i];
-        console.log(`Sell Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
+        console.log(`Точка входа в: ${trendPrice}, если цена достигнет: ${psarPrice}`);
         break;
       }
     }
   }
 
   for (let i = prices.length - 2; i >= 0; i--) {
-    if (trend === 'up' && prices[i] < psar[i]) {
-      trend = 'down';
+    if (trend === 'восходящий' && prices[i] < psar[i]) {
+      trend = 'нисходящий';
       trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      console.log(`Тренд сменит направление на ${trend}, при цене: ${trendPrice}`);
       break;
-    } else if (trend === 'down' && prices[i] > psar[i]) {
-      trend = 'up';
+    } else if (trend === 'нисходящий' && prices[i] > psar[i]) {
+      trend = 'восходящий';
       trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      console.log(`Тренд сменит направление на ${trend}, при цене: ${trendPrice}`);
       break;
     }
   }
 
   for (let i = prices.length - 1; i >= 0; i--) {
-    if (trend === 'down' && prices[i] > psar[i]) {
-      trend = 'up';
+    if (trend === 'нисходящий' && prices[i] > psar[i]) {
+      trend = 'восходящий';
       trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      console.log(`Тренд сменит направление на ${trend}, при цене: ${trendPrice}`);
       break;
-    } else if (trend === 'up' && prices[i] < psar[i]) {
-      trend = 'down';
+    } else if (trend === 'восходящий' && prices[i] < psar[i]) {
+      trend = 'нисходящий';
       trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      console.log(`Тренд сменит направление на ${trend}, при цене: ${trendPrice}`);
       break;
     }
   }
