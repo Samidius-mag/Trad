@@ -11,12 +11,12 @@ function calculateDeviation(period) {
 }
 
 // расчет процентного отклонения для периодов 1 час, 4 часа, 12 часов и 24 часов
-const deviation1h = calculateDeviation(1);
-const deviation4h = calculateDeviation(4 * 1);
-const deviation12h = calculateDeviation(12 * 1);
-const deviation24h = calculateDeviation(24 * 1);
-const deviation7d = calculateDeviation(168 * 1);
-const deviation30d = calculateDeviation(720 * 1);
+const deviation1h = (0.5);
+const deviation4h = (0.7);
+const deviation12h = (0.9);
+const deviation24h = (1.2);
+const deviation7d = (1.5);
+const deviation30d = (2);
 /*
 console.log(`1h deviation: ${deviation1h}%`);
 console.log(`4h deviation: ${deviation4h}%`);
