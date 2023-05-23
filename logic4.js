@@ -1,60 +1,83 @@
 const fs = require('fs');
+const { PSAR } = require('technicalindicators');
 
-const data = JSON.parse(fs.readFileSync('price.json'));
+fs.readFile('price.json', (err, data) => {
+  if (err) throw err;
 
-// функция для расчета процентного отклонения
-function calculateDeviation(period) {
-  const prices = data.slice(-period).map(candle => parseFloat(candle.close));
-  const average = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-  const deviation = Math.sqrt(prices.reduce((sum, price) => sum + Math.pow(price - average, 2), 0) / prices.length);
-  return deviation / average * 100;
-}
+  const prices = JSON.parse(data).map(candle => parseFloat(candle.close));
+  const psar = PSAR.calculate({ high: prices, low: prices, step: 0.02, max: 0.2 });
 
-// расчет процентного отклонения для периодов 1 час, 4 часа, 12 часов и 24 часов
-const deviation1h = (0.2);
-const deviation4h = (0.5);
-const deviation12h = (0.7);
-const deviation24h = (1.0);
-const deviation7d = (1.3);
-const deviation30d = (1.6);
-/*
-console.log(`1h deviation: ${deviation1h}%`);
-console.log(`4h deviation: ${deviation4h}%`);
-console.log(`12h deviation: ${deviation12h}%`);
-console.log(`24h deviation: ${deviation24h}%`);
-*/
-// функция для расчета уровней поддержки и сопротивления
-function calculateLevels(period, deviation) {
-  const prices = data.slice(-period).map(candle => parseFloat(candle.close));
-  const average = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-  const support = average - average * deviation / 100;
-  const resistance = average + average * deviation / 100;
-  return { support, resistance };
-}
+  let trend = 'none';
+  let entry = 'none';
+  let psarPrice = 0;
+  let trendPrice = 0;
+  let reversalPrice = 0;
 
-// расчет уровней поддержки и сопротивления для периодов 1 час, 4 часа, 12 часов и 24 часов
-const levels1h = calculateLevels(1, deviation1h);
-const levels4h = calculateLevels(4 * 1, deviation4h);
-const levels12h = calculateLevels(12 * 1, deviation12h);
-const levels24h = calculateLevels(24 * 1, deviation24h);
-const levels7d = calculateLevels(168 * 1, deviation24h);
-const levels30d = calculateLevels(720 * 1, deviation24h);
+  for (let i = prices.length - 1; i >= 0; i--) {
+    if (prices[i] > psar[i]) {
+      trend = 'up';
+      psarPrice = psar[i];
+      if (i > 0 && prices[i - 1] < psar[i - 1]) {
+        entry = 'buy';
+        trendPrice = prices[i];
+        console.log(`Buy Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
+        break;
+      }
+    } else if (prices[i] < psar[i]) {
+      trend = 'down';
+      psarPrice = psar[i];
+      if (i > 0 && prices[i - 1] > psar[i - 1]) {
+        entry = 'sell';
+        trendPrice = prices[i];
+        console.log(`Sell Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
+        break;
+      }
+    }
+  }
 
-console.log(`1 уровень: 
-Поддержка ${levels1h.support.toFixed(2)}, 
-Сопротивление: ${levels1h.resistance.toFixed(2)}`);
-console.log(`2 уровень: 
-Поддержка ${levels4h.support.toFixed(2)}, 
-Сопротивление: ${levels4h.resistance.toFixed(2)}`);
-console.log(`3 уровень: 
-Поддержка ${levels12h.support.toFixed(2)}, 
-Сопротивление: ${levels12h.resistance.toFixed(2)}`);
-console.log(`4 уровень: 
-Поддержка ${levels24h.support.toFixed(2)}, 
-Сопротивление: ${levels24h.resistance.toFixed(2)}`);
-console.log(`5 уровень: 
-Поддержка ${levels7d.support.toFixed(2)}, 
-Сопротивление: ${levels7d.resistance.toFixed(2)}`);
-console.log(`6 уровень: 
-Поддержка ${levels30d.support.toFixed(2)}, 
-Сопротивление: ${levels30d.resistance.toFixed(2)}`);
+  for (let i = prices.length - 2; i >= 0; i--) {
+    if (trend === 'up' && prices[i] < psar[i]) {
+      trend = 'down';
+      trendPrice = prices[i];
+      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      break;
+    } else if (trend === 'down' && prices[i] > psar[i]) {
+      trend = 'up';
+      trendPrice = prices[i];
+      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      break;
+    }
+  }
+
+  for (let i = prices.length - 1; i >= 0; i--) {
+    if (trend === 'down' && prices[i] > psar[i]) {
+      trend = 'up';
+      trendPrice = prices[i];
+      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      break;
+    } else if (trend === 'up' && prices[i] < psar[i]) {
+      trend = 'down';
+      trendPrice = prices[i];
+      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
+      break;
+    }
+  }
+
+  if (trend === 'up') {
+    for (let i = prices.length - 1; i >= 0; i--) {
+      if (prices[i] < psar[i]) {
+        reversalPrice = prices[i];
+        console.log(`Reversal Price: ${reversalPrice}`);
+        break;
+      }
+    }
+  } else if (trend === 'down') {
+    for (let i = prices.length - 1; i >= 0; i--) {
+      if (prices[i] > psar[i]) {
+        reversalPrice = prices[i];
+        console.log(`Reversal Price: ${reversalPrice}`);
+        break;
+      }
+    }
+  }
+});
