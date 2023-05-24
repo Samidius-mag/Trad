@@ -95,7 +95,7 @@ function getBounceLevels(prices) {
   const level2 = (minPrice + range * 0.36).toFixed(2);
   const level3 = (minPrice + range * 0.54).toFixed(2);
   const level4 = (minPrice + range * 0.72).toFixed(2);
-  const level5 = (minPrice + range * 0.98).toFixed(2);
+  const level5 = (minPrice + range * 0.90).toFixed(2);
 
   return { level1, level2, level3, level4, level5 };
 }
@@ -114,7 +114,7 @@ function getReversalPoints(prices) {
   const level2 = minPrice + range * 0.36;
   const level3 = minPrice + range * 0.54;
   const level4 = minPrice + range * 0.72;
-  const level5 = minPrice + range * 0.98;
+  const level5 = minPrice + range * 0.90;
 
   const reversalPoints = [];
 
