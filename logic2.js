@@ -5,12 +5,12 @@ const data = JSON.parse(fs.readFileSync('price.json'));
 
 // Функция для вычисления индикаторов
 function calculateIndicators(prices) {
-  const sma3 = SMA.calculate({ period: 3, values: prices });
-  const sma6 = SMA.calculate({ period: 6, values: prices });
-  const sma9 = SMA.calculate({ period: 9, values: prices });
-  const ema3 = EMA.calculate({ period: 3, values: prices });
-  const ema6 = EMA.calculate({ period: 6, values: prices });
-  const ema9 = EMA.calculate({ period: 9, values: prices });
+  const sma3 = SMA.calculate({ period: 30, values: prices });
+  const sma6 = SMA.calculate({ period: 60, values: prices });
+  const sma9 = SMA.calculate({ period: 90, values: prices });
+  const ema3 = EMA.calculate({ period: 30, values: prices });
+  const ema6 = EMA.calculate({ period: 60, values: prices });
+  const ema9 = EMA.calculate({ period: 90, values: prices });
   const macd = MACD.calculate({ values: prices, fastPeriod: 18, slowPeriod: 36, signalPeriod: 9 });
   const rsi = RSI.calculate({ period: 18, values: prices });
   const stoch = Stochastic.calculate({ period: 18, high: prices, low: prices, close: prices, signalPeriod: 3 });
