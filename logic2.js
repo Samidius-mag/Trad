@@ -91,9 +91,9 @@ function getBounceLevels(prices) {
   const maxPrice = Math.max(...prices);
   const minPrice = Math.min(...prices);
   const range = maxPrice - minPrice;
-  const level1 = (minPrice + range * 0.236).toFixed(2);
-  const level2 = (minPrice + range * 0.382).toFixed(2);
-  const level3 = (minPrice + range * 0.5).toFixed(2);
+  const level1 = (minPrice + range * 3).toFixed(2);
+  const level2 = (minPrice + range * 6).toFixed(2);
+  const level3 = (minPrice + range * 9).toFixed(2);
   const level4 = (minPrice + range * 0.618).toFixed(2);
   const level5 = (minPrice + range * 0.764).toFixed(2);
 
@@ -102,17 +102,17 @@ function getBounceLevels(prices) {
 
 // Определяем уровни отскока для текущей цены и для идущего тренда
 const currentPrice = data[data.length - 1].close.toFixed(2);
-const currentBounceLevels = getBounceLevels(data.slice(-100).map(candle => candle.close));
-const trendBounceLevels = getBounceLevels(data.slice(-200).map(candle => candle.close));
+const currentBounceLevels = getBounceLevels(data.slice(-108).map(candle => candle.close));
+const trendBounceLevels = getBounceLevels(data.slice(-216).map(candle => candle.close));
 
 // Функция для определения точек разворота
 function getReversalPoints(prices) {
   const maxPrice = Math.max(...prices);
   const minPrice = Math.min(...prices);
   const range = maxPrice - minPrice;
-  const level1 = minPrice + range * 0.236;
-  const level2 = minPrice + range * 0.382;
-  const level3 = minPrice + range * 0.5;
+  const level1 = minPrice + range * 3;
+  const level2 = minPrice + range * 6;
+  const level3 = minPrice + range * 9;
   const level4 = minPrice + range * 0.618;
   const level5 = minPrice + range * 0.764;
 
