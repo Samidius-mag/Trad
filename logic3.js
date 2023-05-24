@@ -2,7 +2,7 @@ const fs = require('fs');
 const { RSI, PSAR, EMA, SMA } = require('technicalindicators');
 
 const PRICE_FILE = 'price.json';
-const PRICE_MULTIPLIER = 49248;
+const PRICE_MULTIPLIER = 369;
 
 const loadPriceData = () => {
   const rawData = fs.readFileSync(PRICE_FILE);
@@ -73,13 +73,13 @@ const entryExitPoints24h = getEntryExitPoints(priceData, 24);
 const indicators = getIndicators(priceData);
 
 console.log('Trend direction:', trendDirection);
-//console.log('Future price direction in 4 hours:', futurePriceDirection4h);
-//console.log('Future price direction in 12 hours:', futurePriceDirection12h);
-//console.log('Future price direction in 24 hours:', futurePriceDirection24h);
-//console.log('Entry/exit points for 4 hours:', entryExitPoints4h);
-//console.log('Entry/exit points for 12 hours:', entryExitPoints12h);
-//console.log('Entry/exit points for 24 hours:', entryExitPoints24h);
-//console.log('RSI:', indicators.rsi);
+console.log('Future price direction in 4 hours:', futurePriceDirection4h);
+console.log('Future price direction in 12 hours:', futurePriceDirection12h);
+console.log('Future price direction in 24 hours:', futurePriceDirection24h);
+console.log('Entry/exit points for 4 hours:', entryExitPoints4h);
+console.log('Entry/exit points for 12 hours:', entryExitPoints12h);
+console.log('Entry/exit points for 24 hours:', entryExitPoints24h);
+console.log('RSI:', indicators.rsi);
 console.log('PSAR:', indicators.psar);
-//console.log('EMA:', indicators.ema);
-//console.log('SMA:', indicators.sma);
+console.log('EMA:', indicators.ema);
+console.log('SMA:', indicators.sma);
