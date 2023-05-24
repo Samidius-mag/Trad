@@ -13,7 +13,11 @@ const prices24h = prices.filter((price, index) => index % 24 === 0);
 // Функция для расчета индикаторов
 function calculateIndicators(prices, indicator, options) {
   const input = {
-    values: prices.map(price => price.close),
+    open: prices.map(price => price.open),
+    high: prices.map(price => price.high),
+    low: prices.map(price => price.low),
+    close: prices.map(price => price.close),
+    volume: prices.map(price => price.volume),
     ...options
   };
   return indicator.calculate(input);
