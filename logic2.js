@@ -11,9 +11,9 @@ function calculateIndicators(prices) {
   const ema3 = EMA.calculate({ period: 3, values: prices });
   const ema6 = EMA.calculate({ period: 6, values: prices });
   const ema9 = EMA.calculate({ period: 9, values: prices });
-  const macd = MACD.calculate({ values: prices, fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 });
-  const rsi = RSI.calculate({ period: 14, values: prices });
-  const stoch = Stochastic.calculate({ period: 14, high: prices, low: prices, close: prices, signalPeriod: 3 });
+  const macd = MACD.calculate({ values: prices, fastPeriod: 18, slowPeriod: 36, signalPeriod: 9 });
+  const rsi = RSI.calculate({ period: 18, values: prices });
+  const stoch = Stochastic.calculate({ period: 18, high: prices, low: prices, close: prices, signalPeriod: 3 });
 
   return { sma3, sma6, sma9, ema3, ema6, ema9, macd, rsi, stoch };
 }
