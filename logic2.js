@@ -138,8 +138,8 @@ const currentReversalPoints = getReversalPoints(data.slice(-108).map(candle => c
 const trendReversalPoints = getReversalPoints(data.slice(-216).map(candle => candle.close));
 
 console.log('Trend directions:', trendDirections);
-console.log('Entry/exit prices:', entryExitPrices);
-console.log('Current price bounce levels:', currentBounceLevels);
-console.log('Trend bounce levels:', trendBounceLevels);
+//console.log('Entry/exit prices:', entryExitPrices);
+//console.log('Current price bounce levels:', currentBounceLevels);
+//console.log('Trend bounce levels:', trendBounceLevels);
 console.log('Current price reversal points:', currentReversalPoints);
 console.log('Trend reversal points:', trendReversalPoints);
