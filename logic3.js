@@ -1,211 +1,85 @@
-/*const fs = require('fs');
-const { PSAR } = require('technicalindicators');
-
-fs.readFile('price.json', (err, data) => {
-  if (err) throw err;
-
-  const prices = JSON.parse(data).map(candle => parseFloat(candle.close));
-  const psar = PSAR.calculate({ high: prices, low: prices, step: 0.02, max: 0.2 });
-
-  let trend = 'none';
-  let entry = 'none';
-  let psarPrice = 0;
-  let trendPrice = 0;
-  let reversalPrice = 0;
-
-  for (let i = prices.length - 1; i >= 0; i--) {
-    if (prices[i] > psar[i]) {
-      trend = 'up';
-      psarPrice = psar[i];
-      if (i > 0 && prices[i - 1] < psar[i - 1]) {
-        entry = 'buy';
-        trendPrice = prices[i];
-        console.log(`Buy Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
-        break;
-      }
-    } else if (prices[i] < psar[i]) {
-      trend = 'down';
-      psarPrice = psar[i];
-      if (i > 0 && prices[i - 1] > psar[i - 1]) {
-        entry = 'sell';
-        trendPrice = prices[i];
-        console.log(`Sell Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
-        break;
-      }
-    }
-  }
-
-  for (let i = prices.length - 2; i >= 0; i--) {
-    if (trend === 'up' && prices[i] < psar[i]) {
-      trend = 'down';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      break;
-    } else if (trend === 'down' && prices[i] > psar[i]) {
-      trend = 'up';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      break;
-    }
-  }
-
-  for (let i = prices.length - 1; i >= 0; i--) {
-    if (trend === 'down' && prices[i] > psar[i]) {
-      trend = 'up';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      break;
-    } else if (trend === 'up' && prices[i] < psar[i]) {
-      trend = 'down';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      break;
-    }
-  }
-
-  if (trend === 'up') {
-    for (let i = prices.length - 1; i >= 0; i--) {
-      if (prices[i] < psar[i]) {
-        reversalPrice = prices[i];
-        console.log(`Reversal Price: ${reversalPrice}`);
-        break;
-      }
-    }
-  } else if (trend === 'down') {
-    for (let i = prices.length - 1; i >= 0; i--) {
-      if (prices[i] > psar[i]) {
-        reversalPrice = prices[i];
-        console.log(`Reversal Price: ${reversalPrice}`);
-        break;
-      }
-    }
-  }
-});*/
 const fs = require('fs');
-const { PSAR } = require('technicalindicators');
+const { RSI, PSAR, EMA, SMA } = require('technicalindicators');
 
-fs.readFile('price.json', (err, data) => {
-  if (err) throw err;
+const PRICE_FILE = 'price.json';
+const PRICE_MULTIPLIER = 49248;
 
-  const prices = JSON.parse(data).map(candle => parseFloat(candle.close));
-  const psar = PSAR.calculate({ high: prices, low: prices, step: 0.02, max: 0.2 });
+const loadPriceData = () => {
+  const rawData = fs.readFileSync(PRICE_FILE);
+  return JSON.parse(rawData);
+};
 
-  let trend = 'none';
-  let entry = 'none';
-  let psarPrice = 0;
-  let trendPrice = 0;
-  let reversalPrice = 0;
-  let position = 'none';
-  let positionPrice = 0;
+const getPriceData = () => {
+  const priceData = loadPriceData();
+  return priceData.map(candle => parseFloat(candle.close));
+};
 
-  for (let i = prices.length - 1; i >= 0; i--) {
-    if (prices[i] > psar[i]) {
-      trend = 'up';
-      psarPrice = psar[i];
-      if (i > 0 && prices[i - 1] < psar[i - 1]) {
-        if (position === 'short') {
-          console.log(`Exit Short: ${prices[i]}, PSAR Price: ${psarPrice}`);
-          position = 'none';
-          positionPrice = 0;
-        }
-        if (entry === 'none') {
-          entry = 'buy';
-          trendPrice = prices[i];
-          console.log(`Buy Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
-        }
-      }
-    } else if (prices[i] < psar[i]) {
-      trend = 'down';
-      psarPrice = psar[i];
-      if (i > 0 && prices[i - 1] > psar[i - 1]) {
-        if (position === 'long') {
-          console.log(`Exit Long: ${prices[i]}, PSAR Price: ${psarPrice}`);
-          position = 'none';
-          positionPrice = 0;
-        }
-        if (entry === 'none') {
-          entry = 'sell';
-          trendPrice = prices[i];
-          console.log(`Sell Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
-        }
-      }
-    }
-    if (position === 'none' && entry === 'buy' && prices[i] > trendPrice) {
-      position = 'long';
-      positionPrice = prices[i];
-      console.log(`Long Position: ${positionPrice}`);
-      entry = 'none';
-    } else if (position === 'none' && entry === 'sell' && prices[i] < trendPrice) {
-      position = 'short';
-      positionPrice = prices[i];
-      console.log(`Short Position: ${positionPrice}`);
-      entry = 'none';
-    }
+const getTrendDirection = (priceData) => {
+  const currentPrice = priceData[priceData.length - 1];
+  const previousPrice = priceData[priceData.length - 2];
+  if (currentPrice > previousPrice) {
+    return 'up';
+  } else if (currentPrice < previousPrice) {
+    return 'down';
+  } else {
+    return 'sideways';
   }
+};
 
-  for (let i = prices.length - 2; i >= 0; i--) {
-    if (trend === 'up' && prices[i] < psar[i]) {
-      trend = 'down';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      if (position === 'long') {
-        console.log(`Exit Long: ${prices[i]}, PSAR Price: ${psar[i]}`);
-        position = 'none';
-        positionPrice = 0;
-      }
-      break;
-    } else if (trend === 'down' && prices[i] > psar[i]) {
-      trend = 'up';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      if (position === 'short') {
-        console.log(`Exit Short: ${prices[i]}, PSAR Price: ${psar[i]}`);
-        position = 'none';
-        positionPrice = 0;
-      }
-      break;
-    }
+const getFuturePriceDirection = (priceData, hours) => {
+  const currentPrice = priceData[priceData.length - 1];
+  const futurePrice = priceData[priceData.length - 1 + hours];
+  if (futurePrice > currentPrice) {
+    return 'up';
+  } else if (futurePrice < currentPrice) {
+    return 'down';
+  } else {
+    return 'sideways';
   }
+};
 
-  for (let i = prices.length - 1; i >= 0; i--) {
-    if (trend === 'down' && prices[i] > psar[i]) {
-      trend = 'up';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      if (position === 'short') {
-        console.log(`Exit Short: ${prices[i]}, PSAR Price: ${psar[i]}`);
-        position = 'none';
-        positionPrice = 0;
-      }
-      break;
-    } else if (trend === 'up' && prices[i] < psar[i]) {
-      trend = 'down';
-      trendPrice = prices[i];
-      console.log(`Trend changed to ${trend}, Trend Price: ${trendPrice}`);
-      if (position === 'long') {
-        console.log(`Exit Long: ${prices[i]}, PSAR Price: ${psar[i]}`);
-        position = 'none';
-        positionPrice = 0;
-      }
-      break;
-    }
+const getEntryExitPoints = (priceData, hours) => {
+  const currentPrice = priceData[priceData.length - 1];
+  const futurePrice = priceData[priceData.length - 1 + hours];
+  if (futurePrice > currentPrice) {
+    const stopLoss = currentPrice - (currentPrice * 0.02);
+    const takeProfit = futurePrice + (futurePrice * 0.05);
+    return { entry: currentPrice, stopLoss, takeProfit };
+  } else if (futurePrice < currentPrice) {
+    const stopLoss = currentPrice + (currentPrice * 0.02);
+    const takeProfit = futurePrice - (futurePrice * 0.05);
+    return { entry: currentPrice, stopLoss, takeProfit };
+  } else {
+    return null;
   }
+};
 
-  if (trend === 'up') {
-    for (let i = prices.length - 1; i >= 0; i--) {
-      if (prices[i] < psar[i]) {
-        reversalPrice = prices[i];
-        console.log(`Reversal Price: ${reversalPrice}`);
-        break;
-      }
-    }
-  } else if (trend === 'down') {
-    for (let i = prices.length - 1; i >= 0; i--) {
-      if (prices[i] > psar[i]) {
-        reversalPrice = prices[i];
-        console.log(`Reversal Price: ${reversalPrice}`);
-        break;
-      }
-    }
-  }
-});
+const getIndicators = (priceData) => {
+  const rsi = RSI.calculate({ values: priceData, period: PRICE_MULTIPLIER });
+  const psar = PSAR.calculate({ high: priceData.map(p => p + 100), low: priceData.map(p => p - 100), step: 0.02, max: 0.2 });
+  const ema = EMA.calculate({ values: priceData, period: PRICE_MULTIPLIER });
+  const sma = SMA.calculate({ values: priceData, period: PRICE_MULTIPLIER });
+  return { rsi, psar, ema, sma };
+};
+
+const priceData = getPriceData();
+const trendDirection = getTrendDirection(priceData);
+const futurePriceDirection4h = getFuturePriceDirection(priceData, 4);
+const futurePriceDirection12h = getFuturePriceDirection(priceData, 12);
+const futurePriceDirection24h = getFuturePriceDirection(priceData, 24);
+const entryExitPoints4h = getEntryExitPoints(priceData, 4);
+const entryExitPoints12h = getEntryExitPoints(priceData, 12);
+const entryExitPoints24h = getEntryExitPoints(priceData, 24);
+const indicators = getIndicators(priceData);
+
+console.log('Trend direction:', trendDirection);
+console.log('Future price direction in 4 hours:', futurePriceDirection4h);
+console.log('Future price direction in 12 hours:', futurePriceDirection12h);
+console.log('Future price direction in 24 hours:', futurePriceDirection24h);
+console.log('Entry/exit points for 4 hours:', entryExitPoints4h);
+console.log('Entry/exit points for 12 hours:', entryExitPoints12h);
+console.log('Entry/exit points for 24 hours:', entryExitPoints24h);
+console.log('RSI:', indicators.rsi);
+console.log('PSAR:', indicators.psar);
+console.log('EMA:', indicators.ema);
+console.log('SMA:', indicators.sma);
