@@ -5,15 +5,15 @@ const data = JSON.parse(fs.readFileSync('price.json'));
 
 // Функция для вычисления индикаторов
 function calculateIndicators(prices) {
-  const sma3 = SMA.calculate({ period: 3, values: prices });
-  const sma6 = SMA.calculate({ period: 6, values: prices });
-  const sma9 = SMA.calculate({ period: 9, values: prices });
-  const ema3 = EMA.calculate({ period: 3, values: prices });
-  const ema6 = EMA.calculate({ period: 6, values: prices });
-  const ema9 = EMA.calculate({ period: 9, values: prices });
-  const macd = MACD.calculate({ values: prices, fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 });
-  const rsi = RSI.calculate({ period: 14, values: prices });
-  const stoch = Stochastic.calculate({ period: 14, high: prices, low: prices, close: prices, signalPeriod: 3 });
+  const sma3 = SMA.calculate({ period: 18, values: prices });
+  const sma6 = SMA.calculate({ period: 36, values: prices });
+  const sma9 = SMA.calculate({ period: 54, values: prices });
+  const ema3 = EMA.calculate({ period: 18, values: prices });
+  const ema6 = EMA.calculate({ period: 36, values: prices });
+  const ema9 = EMA.calculate({ period: 54, values: prices });
+  const macd = MACD.calculate({ values: prices, fastPeriod: 3, slowPeriod: 6, signalPeriod: 9 });
+  const rsi = RSI.calculate({ period: 3, values: prices });
+  const stoch = Stochastic.calculate({ period: 3, high: prices, low: prices, close: prices, signalPeriod: 9 });
 
   return { sma3, sma6, sma9, ema3, ema6, ema9, macd, rsi, stoch };
 }
@@ -91,30 +91,30 @@ function getBounceLevels(prices) {
   const maxPrice = Math.max(...prices);
   const minPrice = Math.min(...prices);
   const range = maxPrice - minPrice;
-  const level1 = (minPrice + range * 0.236).toFixed(2);
-  const level2 = (minPrice + range * 0.382).toFixed(2);
-  const level3 = (minPrice + range * 0.5).toFixed(2);
-  const level4 = (minPrice + range * 0.618).toFixed(2);
-  const level5 = (minPrice + range * 0.764).toFixed(2);
+  const level1 = (minPrice + range * 0.18).toFixed(2);
+  const level2 = (minPrice + range * 0.36).toFixed(2);
+  const level3 = (minPrice + range * 0.54).toFixed(2);
+  const level4 = (minPrice + range * 0.72).toFixed(2);
+  const level5 = (minPrice + range * 0.98).toFixed(2);
 
   return { level1, level2, level3, level4, level5 };
 }
 
 // Определяем уровни отскока для текущей цены и для идущего тренда
 const currentPrice = data[data.length - 1].close.toFixed(2);
-const currentBounceLevels = getBounceLevels(data.slice(-100).map(candle => candle.close));
-const trendBounceLevels = getBounceLevels(data.slice(-200).map(candle => candle.close));
+const currentBounceLevels = getBounceLevels(data.slice(-108).map(candle => candle.close));
+const trendBounceLevels = getBounceLevels(data.slice(-216).map(candle => candle.close));
 
 // Функция для определения точек разворота
 function getReversalPoints(prices) {
   const maxPrice = Math.max(...prices);
   const minPrice = Math.min(...prices);
   const range = maxPrice - minPrice;
-  const level1 = minPrice + range * 0.236;
-  const level2 = minPrice + range * 0.382;
-  const level3 = minPrice + range * 0.5;
-  const level4 = minPrice + range * 0.618;
-  const level5 = minPrice + range * 0.764;
+  const level1 = minPrice + range * 0.18;
+  const level2 = minPrice + range * 0.36;
+  const level3 = minPrice + range * 0.54;
+  const level4 = minPrice + range * 0.72;
+  const level5 = minPrice + range * 0.98;
 
   const reversalPoints = [];
 
@@ -134,8 +134,8 @@ function getReversalPoints(prices) {
 }
 
 // Определяем точки разворота для текущей цены и для идущего тренда
-const currentReversalPoints = getReversalPoints(data.slice(-100).map(candle => candle.close));
-const trendReversalPoints = getReversalPoints(data.slice(-200).map(candle => candle.close));
+const currentReversalPoints = getReversalPoints(data.slice(-108).map(candle => candle.close));
+const trendReversalPoints = getReversalPoints(data.slice(-216).map(candle => candle.close));
 
 console.log('Trend directions:', trendDirections);
 console.log('Entry/exit prices:', entryExitPrices);
