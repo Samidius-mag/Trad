@@ -1,77 +1,143 @@
 const fs = require('fs');
-const { SMA, RSI, MACD, EMA } = require('technicalindicators');
-const price = JSON.parse(fs.readFileSync('price.json'));
+const { SMA, EMA, MACD, RSI, Stochastic } = require('technicalindicators');
 
-// Рассчитываем SMA (Simple Moving Average) с разными периодами
-const smaPeriods = [21, 55, 89, 144];
-const smaValues = smaPeriods.map(period => SMA.calculate({ period, values: price.map(p => Number(p.close)) }));
-const smaCurrentValues = smaValues.map(sma => sma[sma.length - 1]);
+const data = JSON.parse(fs.readFileSync('price.json'));
 
-// Рассчитываем RSI (Relative Strength Index) с разными периодами
-const rsiPeriods = [14, 28, 56, 84];
-const rsiValues = rsiPeriods.map(period => RSI.calculate({ period, values: price.map(p => Number(p.close)) }));
-const rsiCurrentValues = rsiValues.map(rsi => rsi[rsi.length - 1]);
+// Функция для вычисления индикаторов
+function calculateIndicators(prices) {
+  const sma3 = SMA.calculate({ period: 3, values: prices });
+  const sma6 = SMA.calculate({ period: 6, values: prices });
+  const sma9 = SMA.calculate({ period: 9, values: prices });
+  const ema3 = EMA.calculate({ period: 3, values: prices });
+  const ema6 = EMA.calculate({ period: 6, values: prices });
+  const ema9 = EMA.calculate({ period: 9, values: prices });
+  const macd = MACD.calculate({ values: prices, fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 });
+  const rsi = RSI.calculate({ period: 14, values: prices });
+  const stoch = Stochastic.calculate({ period: 14, high: prices, low: prices, close: prices, signalPeriod: 3 });
 
-// Рассчитываем MACD (Moving Average Convergence Divergence) с разными параметрами
-const macdInputs = [
-  { values: price.map(p => Number(p.close)), fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 },
-  { values: price.map(p => Number(p.close)), fastPeriod: 6, slowPeriod: 13, signalPeriod: 4 },
-  { values: price.map(p => Number(p.close)), fastPeriod: 28, slowPeriod: 56, signalPeriod: 14 },
-  { values: price.map(p => Number(p.close)), fastPeriod: 42, slowPeriod: 84, signalPeriod: 21 },
-];
-const macdValues = macdInputs.map(input => MACD.calculate(input));
-const macdCurrentValues = macdValues.map(macd => macd[macd.length - 1]);
-const macdSignalValues = macdValues.map(macd => macd[macd.length - 1].signal);
-
-// Рассчитываем EMA (Exponential Moving Average) с периодом 50
-const emaPeriod = 55;
-const emaValues = EMA.calculate({ period: emaPeriod, values: price.map(p => Number(p.close)) });
-const emaCurrentValue = emaValues[emaValues.length - 1];
-
-// Рассчитываем прогноз цен на 12, 4 и 1 час и направление тренда
-const lastPrice = price[price.length - 1].close;
-const predictions = [];
-const trends = [];
-for (let i = 0; i < smaPeriods.length; i++) {
-  const sma = smaCurrentValues[i];
-  const rsi = rsiCurrentValues[i];
-  const macdValue = macdCurrentValues[i].MACD;
-  const signalValue = macdSignalValues[i];
-  const prediction12h = lastPrice * (1 + ((sma - lastPrice) / lastPrice) + ((rsi - 50) / 100 * 2) + ((macdValue - signalValue) / lastPrice * 2));
-  predictions.push(prediction12h);
-  const trend12h = prediction12h > emaCurrentValue ? '🔼' : '🔽';
-  trends.push(trend12h);
-}
-for (let i = 0; i < smaPeriods.length; i++) {
-  const sma = smaValues[i][smaValues[i].length - 4];
-  const rsi = rsiValues[i][rsiValues[i].length - 4];
-  const macdValue = macdValues[i][macdValues[i].length - 4].MACD;
-  const signalValue = macdValues[i][macdValues[i].length - 4].signal;
-  const prediction4h = price[price.length - 4].close * (1 + ((sma - price[price.length - 4].close) / price[price.length - 4].close) + ((rsi - 50) / 100) + ((macdValue - signalValue) / price[price.length - 4].close));
-  predictions.push(prediction4h);
-  const trend4h = prediction4h > emaCurrentValue ? '🔼' : '🔽';
-  trends.push(trend4h);
-}
-for (let i = 0; i < smaPeriods.length; i++) {
-  const sma = smaValues[i][smaValues[i].length - 1];
-  const rsi = rsiValues[i][rsiValues[i].length - 1];
-  const macdValue = macdValues[i][macdValues[i].length - 1].MACD;
-  const signalValue = macdValues[i][macdValues[i].length - 1].signal;
-  const prediction1h = price[price.length - 1].close * (1 + ((sma - price[price.length - 1].close) / price[price.length - 1].close) + ((rsi - 50) / 100) + ((macdValue - signalValue) / price[price.length - 1].close));
-  predictions.push(prediction1h);
-  const trend1h = prediction1h > emaCurrentValue ? '🔼' : '🔽';
-  trends.push(trend1h);
+  return { sma3, sma6, sma9, ema3, ema6, ema9, macd, rsi, stoch };
 }
 
-console.log(`Прогноз 1H:
-${predictions.slice(smaPeriods.length * 2).map(p => p.toFixed(1)).join(', ')}`);
-console.log(`Тренд 1H:
-${trends.slice(smaPeriods.length * 2).join(', ')}`);
-console.log(`Прогноз 4H:
-${predictions.slice(smaPeriods.length, smaPeriods.length * 2).map(p => p.toFixed(1)).join(', ')}`);
-console.log(`Тренд 4H:
-${trends.slice(smaPeriods.length, smaPeriods.length * 2).join(', ')}`);
-console.log(`Прогноз 12H:
-${predictions.slice(0, smaPeriods.length).map(p => p.toFixed(1)).join(', ')}`);
-console.log(`Тренд 12H:
-${trends.slice(0, smaPeriods.length).join(', ')}`);
+// Вычисляем индикаторы для всех свечей
+const indicators = calculateIndicators(data.map(candle => candle.close));
+
+// Функция для определения направления тренда
+function getTrendDirection(indicatorValues) {
+  const lastValue = indicatorValues[indicatorValues.length - 1];
+  const prevValue = indicatorValues[indicatorValues.length - 2];
+
+  if (lastValue > prevValue) {
+    return 'up';
+  } else if (lastValue < prevValue) {
+    return 'down';
+  } else {
+    return 'flat';
+  }
+}
+
+// Определяем направление тренда для каждого индикатора
+const trendDirections = {
+  sma3: getTrendDirection(indicators.sma3),
+  sma6: getTrendDirection(indicators.sma6),
+  sma9: getTrendDirection(indicators.sma9),
+  ema3: getTrendDirection(indicators.ema3),
+  ema6: getTrendDirection(indicators.ema6),
+  ema9: getTrendDirection(indicators.ema9),
+  macd: getTrendDirection(indicators.macd.map(item => item.histogram)),
+  rsi: getTrendDirection(indicators.rsi),
+  stoch: getTrendDirection(indicators.stoch.map(item => item.d)),
+};
+
+// Функция для определения точек входа и выхода из сделок
+function getEntryExitPoints(indicatorValues, trendDirection) {
+  const entryPoints = [];
+  const exitPoints = [];
+
+  for (let i = 1; i < indicatorValues.length; i++) {
+    const prevValue = indicatorValues[i - 1];
+    const currValue = indicatorValues[i];
+
+    if (trendDirection === 'up' && prevValue < 0 && currValue > 0) {
+      entryPoints.push(i);
+    } else if (trendDirection === 'down' && prevValue > 0 && currValue < 0) {
+      entryPoints.push(i);
+    } else if (trendDirection === 'up' && prevValue > 0 && currValue < 0) {
+      exitPoints.push(i);
+    } else if (trendDirection === 'down' && prevValue < 0 && currValue > 0) {
+      exitPoints.push(i);
+    }
+  }
+
+  return { entryPoints, exitPoints };
+}
+
+// Определяем точки входа и выхода для каждого индикатора
+const entryExitPoints = {
+  sma3: getEntryExitPoints(indicators.sma3, trendDirections.sma3),
+  sma6: getEntryExitPoints(indicators.sma6, trendDirections.sma6),
+  sma9: getEntryExitPoints(indicators.sma9, trendDirections.sma9),
+  ema3: getEntryExitPoints(indicators.ema3, trendDirections.ema3),
+  ema6: getEntryExitPoints(indicators.ema6, trendDirections.ema6),
+  ema9: getEntryExitPoints(indicators.ema9, trendDirections.ema9),
+  macd: getEntryExitPoints(indicators.macd.map(item => item.histogram), trendDirections.macd),
+  rsi: getEntryExitPoints(indicators.rsi, trendDirections.rsi),
+  stoch: getEntryExitPoints(indicators.stoch.map(item => item.d), trendDirections.stoch),
+};
+
+// Функция для определения уровней отскока
+function getBounceLevels(prices) {
+  const maxPrice = Math.max(...prices);
+  const minPrice = Math.min(...prices);
+  const range = maxPrice - minPrice;
+  const level1 = minPrice + range * 0.236;
+  const level2 = minPrice + range * 0.382;
+  const level3 = minPrice + range * 0.5;
+  const level4 = minPrice + range * 0.618;
+  const level5 = minPrice + range * 0.764;
+
+  return { level1, level2, level3, level4, level5 };
+}
+
+// Определяем уровни отскока для текущей цены и для идущего тренда
+const currentPrice = data[data.length - 1].close;
+const currentBounceLevels = getBounceLevels(data.slice(-100).map(candle => candle.close));
+const trendBounceLevels = getBounceLevels(data.slice(-200).map(candle => candle.close));
+
+// Функция для определения точек разворота
+function getReversalPoints(prices) {
+  const maxPrice = Math.max(...prices);
+  const minPrice = Math.min(...prices);
+  const range = maxPrice - minPrice;
+  const level1 = minPrice + range * 0.236;
+  const level2 = minPrice + range * 0.382;
+  const level3 = minPrice + range * 0.5;
+  const level4 = minPrice + range * 0.618;
+  const level5 = minPrice + range * 0.764;
+
+  const reversalPoints = [];
+
+  for (let i = 1; i < prices.length - 1; i++) {
+    const prevPrice = prices[i - 1];
+    const currPrice = prices[i];
+    const nextPrice = prices[i + 1];
+
+    if (prevPrice < currPrice && currPrice > nextPrice && currPrice >= level3) {
+      reversalPoints.push(i);
+    } else if (prevPrice > currPrice && currPrice < nextPrice && currPrice <= level3) {
+      reversalPoints.push(i);
+    }
+  }
+
+  return reversalPoints;
+}
+
+// Определяем точки разворота для текущей цены и для идущего тренда
+const currentReversalPoints = getReversalPoints(data.slice(-100).map(candle => candle.close));
+const trendReversalPoints = getReversalPoints(data.slice(-200).map(candle => candle.close));
+
+console.log('Trend directions:', trendDirections);
+console.log('Entry/exit points:', entryExitPoints);
+console.log('Current price bounce levels:', currentBounceLevels);
+console.log('Trend bounce levels:', trendBounceLevels);
+console.log('Current price reversal points:', currentReversalPoints);
+console.log('Trend reversal points:', trendReversalPoints);
