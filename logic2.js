@@ -48,40 +48,42 @@ const trendDirections = {
   stoch: getTrendDirection(indicators.stoch.map(item => item.d)),
 };
 
-// Функция для определения точек входа и выхода из сделок
-function getEntryExitPoints(indicatorValues, trendDirection) {
-  const entryPoints = [];
-  const exitPoints = [];
+// Функция для определения ценовых показателей входа и выхода из сделок
+function getEntryExitPrices(prices, indicatorValues, trendDirection) {
+  const entryPrices = [];
+  const exitPrices = [];
 
   for (let i = 1; i < indicatorValues.length; i++) {
     const prevValue = indicatorValues[i - 1];
     const currValue = indicatorValues[i];
+    const prevPrice = prices[i - 1];
+    const currPrice = prices[i];
 
     if (trendDirection === 'up' && prevValue < 0 && currValue > 0) {
-      entryPoints.push(i);
+      entryPrices.push(currPrice.toFixed(2));
     } else if (trendDirection === 'down' && prevValue > 0 && currValue < 0) {
-      entryPoints.push(i);
+      entryPrices.push(currPrice.toFixed(2));
     } else if (trendDirection === 'up' && prevValue > 0 && currValue < 0) {
-      exitPoints.push(i);
+      exitPrices.push(currPrice.toFixed(2));
     } else if (trendDirection === 'down' && prevValue < 0 && currValue > 0) {
-      exitPoints.push(i);
+      exitPrices.push(currPrice.toFixed(2));
     }
   }
 
-  return { entryPoints, exitPoints };
+  return { entryPrices, exitPrices };
 }
 
-// Определяем точки входа и выхода для каждого индикатора
-const entryExitPoints = {
-  sma3: getEntryExitPoints(indicators.sma3, trendDirections.sma3),
-  sma6: getEntryExitPoints(indicators.sma6, trendDirections.sma6),
-  sma9: getEntryExitPoints(indicators.sma9, trendDirections.sma9),
-  ema3: getEntryExitPoints(indicators.ema3, trendDirections.ema3),
-  ema6: getEntryExitPoints(indicators.ema6, trendDirections.ema6),
-  ema9: getEntryExitPoints(indicators.ema9, trendDirections.ema9),
-  macd: getEntryExitPoints(indicators.macd.map(item => item.histogram), trendDirections.macd),
-  rsi: getEntryExitPoints(indicators.rsi, trendDirections.rsi),
-  stoch: getEntryExitPoints(indicators.stoch.map(item => item.d), trendDirections.stoch),
+// Определяем ценовые показатели входа и выхода для каждого индикатора
+const entryExitPrices = {
+  sma3: getEntryExitPrices(data.map(candle => candle.close), indicators.sma3, trendDirections.sma3),
+  sma6: getEntryExitPrices(data.map(candle => candle.close), indicators.sma6, trendDirections.sma6),
+  sma9: getEntryExitPrices(data.map(candle => candle.close), indicators.sma9, trendDirections.sma9),
+  ema3: getEntryExitPrices(data.map(candle => candle.close), indicators.ema3, trendDirections.ema3),
+  ema6: getEntryExitPrices(data.map(candle => candle.close), indicators.ema6, trendDirections.ema6),
+  ema9: getEntryExitPrices(data.map(candle => candle.close), indicators.ema9, trendDirections.ema9),
+  macd: getEntryExitPrices(data.map(candle => candle.close), indicators.macd.map(item => item.histogram), trendDirections.macd),
+  rsi: getEntryExitPrices(data.map(candle => candle.close), indicators.rsi, trendDirections.rsi),
+  stoch: getEntryExitPrices(data.map(candle => candle.close), indicators.stoch.map(item => item.d), trendDirections.stoch),
 };
 
 // Функция для определения уровней отскока
@@ -89,17 +91,17 @@ function getBounceLevels(prices) {
   const maxPrice = Math.max(...prices);
   const minPrice = Math.min(...prices);
   const range = maxPrice - minPrice;
-  const level1 = minPrice + range * 0.236;
-  const level2 = minPrice + range * 0.382;
-  const level3 = minPrice + range * 0.5;
-  const level4 = minPrice + range * 0.618;
-  const level5 = minPrice + range * 0.764;
+  const level1 = (minPrice + range * 0.236).toFixed(2);
+  const level2 = (minPrice + range * 0.382).toFixed(2);
+  const level3 = (minPrice + range * 0.5).toFixed(2);
+  const level4 = (minPrice + range * 0.618).toFixed(2);
+  const level5 = (minPrice + range * 0.764).toFixed(2);
 
   return { level1, level2, level3, level4, level5 };
 }
 
 // Определяем уровни отскока для текущей цены и для идущего тренда
-const currentPrice = data[data.length - 1].close;
+const currentPrice = data[data.length - 1].close.toFixed(2);
 const currentBounceLevels = getBounceLevels(data.slice(-100).map(candle => candle.close));
 const trendBounceLevels = getBounceLevels(data.slice(-200).map(candle => candle.close));
 
@@ -122,9 +124,9 @@ function getReversalPoints(prices) {
     const nextPrice = prices[i + 1];
 
     if (prevPrice < currPrice && currPrice > nextPrice && currPrice >= level3) {
-      reversalPoints.push(i);
+      reversalPoints.push(currPrice.toFixed(2));
     } else if (prevPrice > currPrice && currPrice < nextPrice && currPrice <= level3) {
-      reversalPoints.push(i);
+      reversalPoints.push(currPrice.toFixed(2));
     }
   }
 
@@ -136,7 +138,7 @@ const currentReversalPoints = getReversalPoints(data.slice(-100).map(candle => c
 const trendReversalPoints = getReversalPoints(data.slice(-200).map(candle => candle.close));
 
 console.log('Trend directions:', trendDirections);
-console.log('Entry/exit points:', entryExitPoints);
+console.log('Entry/exit prices:', entryExitPrices);
 console.log('Current price bounce levels:', currentBounceLevels);
 console.log('Trend bounce levels:', trendBounceLevels);
 console.log('Current price reversal points:', currentReversalPoints);
