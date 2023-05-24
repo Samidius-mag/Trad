@@ -1,85 +1,69 @@
 const fs = require('fs');
-const { RSI, PSAR, EMA, SMA } = require('technicalindicators');
+const { RSI, PSAR, EMA, SMA, MACD, ADX } = require('technicalindicators');
 
-const PRICE_FILE = 'price.json';
-const PRICE_MULTIPLIER = 369;
+// Читаем данные из файла price.json
+const rawData = fs.readFileSync('price.json');
+const prices = JSON.parse(rawData);
 
-const loadPriceData = () => {
-  const rawData = fs.readFileSync(PRICE_FILE);
-  return JSON.parse(rawData);
-};
+// Разделяем массив цен на отдельные массивы для каждого временного интервала
+const prices4h = prices.filter((price, index) => index % 4 === 0);
+const prices12h = prices.filter((price, index) => index % 12 === 0);
+const prices24h = prices.filter((price, index) => index % 24 === 0);
 
-const getPriceData = () => {
-  const priceData = loadPriceData();
-  return priceData.map(candle => parseFloat(candle.close));
-};
+// Функция для расчета индикаторов
+function calculateIndicators(prices, indicator, options) {
+  const input = {
+    values: prices.map(price => price.close),
+    ...options
+  };
+  return indicator.calculate(input);
+}
 
-const getTrendDirection = (priceData) => {
-  const currentPrice = priceData[priceData.length - 1];
-  const previousPrice = priceData[priceData.length - 2];
-  if (currentPrice > previousPrice) {
-    return 'up';
-  } else if (currentPrice < previousPrice) {
-    return 'down';
-  } else {
-    return 'sideways';
-  }
-};
+// Рассчитываем индикаторы для каждого временного интервала
+const rsi4h = calculateIndicators(prices4h, RSI, { period: 14 });
+const rsi12h = calculateIndicators(prices12h, RSI, { period: 14 });
+const rsi24h = calculateIndicators(prices24h, RSI, { period: 14 });
 
-const getFuturePriceDirection = (priceData, hours) => {
-  const currentPrice = priceData[priceData.length - 1];
-  const futurePrice = priceData[priceData.length - 1 + hours];
-  if (futurePrice > currentPrice) {
-    return 'up';
-  } else if (futurePrice < currentPrice) {
-    return 'down';
-  } else {
-    return 'sideways';
-  }
-};
+const psar4h = calculateIndicators(prices4h, PSAR, { accelerationFactor: 0.02, maxAccelerationFactor: 0.2 });
+const psar12h = calculateIndicators(prices12h, PSAR, { accelerationFactor: 0.02, maxAccelerationFactor: 0.2 });
+const psar24h = calculateIndicators(prices24h, PSAR, { accelerationFactor: 0.02, maxAccelerationFactor: 0.2 });
 
-const getEntryExitPoints = (priceData, hours) => {
-  const currentPrice = priceData[priceData.length - 1];
-  const futurePrice = priceData[priceData.length - 1 + hours];
-  if (futurePrice > currentPrice) {
-    const stopLoss = currentPrice - (currentPrice * 0.02);
-    const takeProfit = futurePrice + (futurePrice * 0.05);
-    return { entry: currentPrice, stopLoss, takeProfit };
-  } else if (futurePrice < currentPrice) {
-    const stopLoss = currentPrice + (currentPrice * 0.02);
-    const takeProfit = futurePrice - (futurePrice * 0.05);
-    return { entry: currentPrice, stopLoss, takeProfit };
-  } else {
-    return null;
-  }
-};
+const ema4h = calculateIndicators(prices4h, EMA, { period: 20 });
+const ema12h = calculateIndicators(prices12h, EMA, { period: 20 });
+const ema24h = calculateIndicators(prices24h, EMA, { period: 20 });
 
-const getIndicators = (priceData) => {
-  const rsi = RSI.calculate({ values: priceData, period: PRICE_MULTIPLIER });
-  const psar = PSAR.calculate({ high: priceData.map(p => p + 100), low: priceData.map(p => p - 100), step: 0.02, max: 0.2 });
-  const ema = EMA.calculate({ values: priceData, period: PRICE_MULTIPLIER });
-  const sma = SMA.calculate({ values: priceData, period: PRICE_MULTIPLIER });
-  return { rsi, psar, ema, sma };
-};
+const sma4h = calculateIndicators(prices4h, SMA, { period: 50 });
+const sma12h = calculateIndicators(prices12h, SMA, { period: 50 });
+const sma24h = calculateIndicators(prices24h, SMA, { period: 50 });
 
-const priceData = getPriceData();
-const trendDirection = getTrendDirection(priceData);
-const futurePriceDirection4h = getFuturePriceDirection(priceData, 4);
-const futurePriceDirection12h = getFuturePriceDirection(priceData, 12);
-const futurePriceDirection24h = getFuturePriceDirection(priceData, 24);
-const entryExitPoints4h = getEntryExitPoints(priceData, 4);
-const entryExitPoints12h = getEntryExitPoints(priceData, 12);
-const entryExitPoints24h = getEntryExitPoints(priceData, 24);
-const indicators = getIndicators(priceData);
+const macd4h = calculateIndicators(prices4h, MACD, { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 });
+const macd12h = calculateIndicators(prices12h, MACD, { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 });
+const macd24h = calculateIndicators(prices24h, MACD, { fastPeriod: 12, slowPeriod: 26, signalPeriod: 9 });
 
-console.log('Trend direction:', trendDirection);
-console.log('Future price direction in 4 hours:', futurePriceDirection4h);
-console.log('Future price direction in 12 hours:', futurePriceDirection12h);
-console.log('Future price direction in 24 hours:', futurePriceDirection24h);
-console.log('Entry/exit points for 4 hours:', entryExitPoints4h);
-console.log('Entry/exit points for 12 hours:', entryExitPoints12h);
-console.log('Entry/exit points for 24 hours:', entryExitPoints24h);
-console.log('RSI:', indicators.rsi);
-console.log('PSAR:', indicators.psar);
-console.log('EMA:', indicators.ema);
-console.log('SMA:', indicators.sma);
+const adx4h = calculateIndicators(prices4h, ADX, { period: 14 });
+const adx12h = calculateIndicators(prices12h, ADX, { period: 14 });
+const adx24h = calculateIndicators(prices24h, ADX, { period: 14 });
+
+// Определяем направление тренда для каждого временного интервала
+const trend4h = ema4h[ema4h.length - 1] > sma4h[sma4h.length - 1] ? 'up' : 'down';
+const trend12h = ema12h[ema12h.length - 1] > sma12h[sma12h.length - 1] ? 'up' : 'down';
+const trend24h = ema24h[ema24h.length - 1] > sma24h[sma24h.length - 1] ? 'up' : 'down';
+
+// Определяем точки входа и выхода для каждого временного интервала
+const entry4h = rsi4h[rsi4h.length - 1] < 30 && psar4h[psar4h.length - 1] < prices4h[prices4h.length - 1].close ? 'buy' : 'sell';
+const entry12h = rsi12h[rsi12h.length - 1] < 30 && psar12h[psar12h.length - 1] < prices12h[prices12h.length - 1].close ? 'buy' : 'sell';
+const entry24h = rsi24h[rsi24h.length - 1] < 30 && psar24h[psar24h.length - 1] < prices24h[prices24h.length - 1].close ? 'buy' : 'sell';
+
+const exit4h = rsi4h[rsi4h.length - 1] > 70 || psar4h[psar4h.length - 1] > prices4h[prices4h.length - 1].close ? 'sell' : 'hold';
+const exit12h = rsi12h[rsi12h.length - 1] > 70 || psar12h[psar12h.length - 1] > prices12h[prices12h.length - 1].close ? 'sell' : 'hold';
+const exit24h = rsi24h[rsi24h.length - 1] > 70 || psar24h[psar24h.length - 1] > prices24h[prices24h.length - 1].close ? 'sell' : 'hold';
+
+// Определяем направление движения цены для каждого временного интервала
+const direction4h = prices4h[prices4h.length - 1].close > prices4h[prices4h.length - 2].close ? 'up' : 'down';
+const direction12h = prices12h[prices12h.length - 1].close > prices12h[prices12h.length - 2].close ? 'up' : 'down';
+const direction24h = prices24h[prices24h.length - 1].close > prices24h[prices24h.length - 2].close ? 'up' : 'down';
+
+// Выводим результаты в консоль
+console.log(`4h trend: ${trend4h}, entry: ${entry4h}, exit: ${exit4h}, direction: ${direction4h}`);
+console.log(`12h trend: ${trend12h}, entry: ${entry12h}, exit: ${exit12h}, direction: ${direction12h}`);
+console.log(`24h trend: ${trend24h}, entry: ${entry24h}, exit: ${exit24h}, direction: ${direction24h}`);
