@@ -80,7 +80,7 @@ const minExitPrice = Math.min(...exitPrices).toFixed(2);
 const maxExitPrice = Math.max(...exitPrices).toFixed(2);
 
 return { minEntryPrice, maxEntryPrice, minExitPrice, maxExitPrice };
-}
+
 
 // Определяем ценовые показатели входа и выхода для каждого индикатора
 const entryExitPrices = {
