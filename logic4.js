@@ -1,11 +1,12 @@
 const fs = require('fs');
-const { PSAR } = require('technicalindicators');
+const { PSAR, RSI } = require('technicalindicators');
 
 fs.readFile('price.json', (err, data) => {
   if (err) throw err;
 
   const prices = JSON.parse(data).map(candle => parseFloat(candle.close));
   const psar = PSAR.calculate({ high: prices, low: prices, step: 0.02, max: 0.2 });
+  const rsi = RSI.calculate({ values: prices, period: 14 });
 
   let trend = 'none';
   let entry = 'none';
@@ -17,19 +18,19 @@ fs.readFile('price.json', (err, data) => {
     if (prices[i] > psar[i]) {
       trend = 'up';
       psarPrice = psar[i];
-      if (i > 0 && prices[i - 1] < psar[i - 1]) {
+      if (i > 0 && prices[i - 1] < psar[i - 1] && rsi[i] < 30) {
         entry = 'buy';
         trendPrice = prices[i];
-        console.log(`Buy Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
+        console.log(`Buy Entry: ${trendPrice}, PSAR Price: ${psarPrice}, RSI: ${rsi[i]}`);
         break;
       }
     } else if (prices[i] < psar[i]) {
       trend = 'down';
       psarPrice = psar[i];
-      if (i > 0 && prices[i - 1] > psar[i - 1]) {
+      if (i > 0 && prices[i - 1] > psar[i - 1] && rsi[i] > 70) {
         entry = 'sell';
         trendPrice = prices[i];
-        console.log(`Sell Entry: ${trendPrice}, PSAR Price: ${psarPrice}`);
+        console.log(`Sell Entry: ${trendPrice}, PSAR Price: ${psarPrice}, RSI: ${rsi[i]}`);
         break;
       }
     }
